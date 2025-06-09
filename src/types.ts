@@ -84,3 +84,28 @@ export interface PaginationResponse<T> {
 // Common types
 export type AlertType = "warning" | "info";
 export type AlertStatus = "pending" | "acknowledged";
+
+// Calendar types
+export interface SupplementCalendarEvent {
+  id: string;
+  supplementName: string;
+  dosage: string;
+  frequency: string;
+  scheduledDate: Date;
+  status: "scheduled" | "taken" | "missed";
+  userSupplementId: string;
+}
+
+export interface SupplementFilterOptions {
+  supplementIds: string[];
+  dateRange: DateRange;
+  status: string[];
+  search: string;
+}
+
+export interface DateRange {
+  start: Date;
+  end: Date;
+}
+
+export type ViewType = "month" | "week" | "day";

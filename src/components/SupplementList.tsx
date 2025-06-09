@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SupplementCombobox } from "@/components/ui/supplement-combobox";
 import { useAllSupplements } from "@/lib/hooks/useAllSupplements";
 import type { UserSupplementResponse, UserSupplementCreate } from "@/types";
@@ -17,6 +18,19 @@ interface SupplementListProps {
   onDelete: (id: string) => Promise<void>;
 }
 
+const frequencyOptions = [
+  { value: "daily", label: "Daily" },
+  { value: "twice daily", label: "Twice daily" },
+  { value: "every other day", label: "Every other day" },
+  { value: "every 3 days", label: "Every 3 days" },
+  { value: "weekly", label: "Weekly" },
+  { value: "with meals", label: "With meals" },
+  { value: "before breakfast", label: "Before breakfast" },
+  { value: "before bed", label: "Before bed" },
+  { value: "as needed", label: "As needed" },
+  { value: "custom", label: "Custom" },
+];
+
 export default function SupplementList({
   supplements = [], // Provide default empty array
   onAdd,
@@ -24,6 +38,7 @@ export default function SupplementList({
   onDelete,
 }: SupplementListProps) {
   const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [customFrequency, setCustomFrequency] = useState("");
   const [formData, setFormData] = useState<UserSupplementCreate>({
     supplement_id: "",
     start_date: new Date().toISOString().split("T")[0],
@@ -38,10 +53,15 @@ export default function SupplementList({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const finalFormData = {
+        ...formData,
+        frequency: formData.frequency === "custom" ? customFrequency : formData.frequency,
+      };
+
       if (isEditing) {
-        await onEdit(isEditing, formData);
+        await onEdit(isEditing, finalFormData);
       } else {
-        await onAdd(formData);
+        await onAdd(finalFormData);
       }
       setIsEditing(null);
       setFormData({
@@ -51,6 +71,7 @@ export default function SupplementList({
         dosage: "",
         frequency: "",
       });
+      setCustomFrequency("");
     } catch (error) {
       // Error is handled by the hook
     }
@@ -58,13 +79,37 @@ export default function SupplementList({
 
   const handleEdit = (supplement: UserSupplementResponse) => {
     setIsEditing(supplement.id);
-    setFormData({
-      supplement_id: supplement.supplement.id,
-      start_date: supplement.start_date.split("T")[0],
-      end_date: supplement.end_date?.split("T")[0] || null,
-      dosage: supplement.dosage,
-      frequency: supplement.frequency,
-    });
+
+    // Check if the frequency is a predefined option
+    const predefinedFrequency = frequencyOptions.find((option) => option.value === supplement.frequency.toLowerCase());
+
+    if (predefinedFrequency) {
+      setFormData({
+        supplement_id: supplement.supplement.id,
+        start_date: supplement.start_date.split("T")[0],
+        end_date: supplement.end_date?.split("T")[0] || null,
+        dosage: supplement.dosage,
+        frequency: predefinedFrequency.value,
+      });
+      setCustomFrequency("");
+    } else {
+      // Custom frequency
+      setFormData({
+        supplement_id: supplement.supplement.id,
+        start_date: supplement.start_date.split("T")[0],
+        end_date: supplement.end_date?.split("T")[0] || null,
+        dosage: supplement.dosage,
+        frequency: "custom",
+      });
+      setCustomFrequency(supplement.frequency);
+    }
+  };
+
+  const handleFrequencyChange = (value: string) => {
+    setFormData({ ...formData, frequency: value });
+    if (value !== "custom") {
+      setCustomFrequency("");
+    }
   };
 
   // Ensure supplements is an array
@@ -138,16 +183,39 @@ export default function SupplementList({
 
               <div className="space-y-2">
                 <Label htmlFor="frequency">Frequency</Label>
-                <Input
-                  id="frequency"
-                  value={formData.frequency}
-                  onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
-                  placeholder="e.g., Once daily, Twice daily, With meals"
-                  required
-                />
+                <Select value={formData.frequency} onValueChange={handleFrequencyChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select frequency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {frequencyOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {formData.frequency === "custom" && (
+                  <Input
+                    placeholder="Enter custom frequency"
+                    value={customFrequency}
+                    onChange={(e) => setCustomFrequency(e.target.value)}
+                    required
+                  />
+                )}
               </div>
 
-              <Button type="submit" disabled={!formData.supplement_id || loadingSupplements} className="w-full">
+              <Button
+                type="submit"
+                disabled={
+                  !formData.supplement_id ||
+                  !formData.frequency ||
+                  (formData.frequency === "custom" && !customFrequency.trim()) ||
+                  loadingSupplements
+                }
+                className="w-full"
+              >
                 {isEditing ? "Update Supplement" : "Add Supplement"}
               </Button>
             </form>

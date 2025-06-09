@@ -111,3 +111,98 @@ export function AlertSystemSkeleton() {
     </Card>
   );
 }
+
+export const LoadingSkeletons = {
+  HealthStatsSkeleton: () => (
+    <Card>
+      <CardHeader>
+        <div className="h-6 bg-muted rounded animate-pulse" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <div className="h-4 bg-muted rounded animate-pulse" />
+          <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-4 bg-muted rounded animate-pulse" />
+          <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
+        </div>
+      </CardContent>
+    </Card>
+  ),
+
+  CalendarSkeleton: () => (
+    <Card>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <div className="h-6 bg-muted rounded animate-pulse" />
+          <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-4 bg-muted rounded animate-pulse" />
+          <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
+        </div>
+      </CardContent>
+    </Card>
+  ),
+
+  SupplementListSkeleton: () => (
+    <Card>
+      <CardHeader>
+        <div className="h-6 bg-muted rounded animate-pulse" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="space-y-2">
+            <div className="h-4 bg-muted rounded animate-pulse" />
+            <div className="h-4 bg-muted rounded animate-pulse w-2/3" />
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  ),
+
+  AlertSystemSkeleton: () => (
+    <Card>
+      <CardHeader>
+        <div className="h-6 bg-muted rounded animate-pulse" />
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className="space-y-2">
+            <div className="h-4 bg-muted rounded animate-pulse" />
+            <div className="h-3 bg-muted rounded animate-pulse w-3/4" />
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  ),
+
+  CalendarSkeleton: () => (
+    <Card>
+      <CardContent className="p-0">
+        {/* Calendar header skeleton */}
+        <div className="grid grid-cols-7 border-b">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <div key={i} className="p-3 text-center bg-muted">
+              <div className="h-4 bg-muted-foreground/20 rounded animate-pulse" />
+            </div>
+          ))}
+        </div>
+
+        {/* Calendar grid skeleton */}
+        <div className="grid grid-cols-7">
+          {Array.from({ length: 35 }).map((_, i) => (
+            <div key={i} className="min-h-[120px] p-2 border border-border">
+              <div className="h-4 bg-muted rounded animate-pulse mb-2 w-6" />
+              <div className="space-y-1">
+                <div className="h-3 bg-muted rounded animate-pulse w-16" />
+                <div className="h-3 bg-muted rounded animate-pulse w-12" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  ),
+};

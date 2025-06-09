@@ -1,7 +1,7 @@
-# Plan implementacji widoku rozszerzonego kalendarza
+# Plan implementacji widoku kalendarza suplementacji
 
 ## 1. Przegląd
-Widok rozszerzonego kalendarza w aplikacji pAIN-less oferuje szczegółowy widok wydarzeń zdrowotnych, w tym okresów suplementacji, historii badań i wizyt. Widok zapewnia zaawansowane funkcje filtrowania i wizualizacji danych zdrowotnych w kontekście czasowym.
+Widok kalendarza suplementacji w aplikacji pAIN-less oferuje wizualizację harmonogramu przyjmowania suplementów użytkownika. Widok jest tylko do odczytu i pozwala na przeglądanie suplementów w kontekście czasowym.
 
 ## 2. Routing widoku
 - Ścieżka: `/calendar`
@@ -19,11 +19,7 @@ CalendarView
 │   ├── MonthView
 │   ├── WeekView
 │   └── DayView
-├── EventList
-│   └── EventItem
-├── EventDetails
-│   └── EventForm
-└── ToastContainer
+└── SupplementTooltip
 ```
 
 ## 4. Szczegóły komponentów
@@ -32,152 +28,113 @@ CalendarView
 - Opis: Nagłówek kalendarza z kontrolkami widoku i filtrami
 - Główne elementy:
   - Przełącznik widoku (miesiąc/tydzień/dzień)
-  - Panel filtrów
+  - Panel filtrów suplementów
   - Przyciski nawigacji
 - Obsługiwane interakcje:
   - Zmiana widoku
-  - Filtrowanie wydarzeń
+  - Filtrowanie suplementów
   - Nawigacja między okresami
 - Typy:
   - ViewType
-  - FilterOptions
+  - SupplementFilterOptions
 - Propsy:
   - currentView: ViewType
   - onViewChange: (view: ViewType) => void
-  - onFilterChange: (filters: FilterOptions) => void
+  - onFilterChange: (filters: SupplementFilterOptions) => void
 
 ### CalendarGrid
-- Opis: Główny komponent wyświetlający kalendarz
+- Opis: Główny komponent wyświetlający kalendarz z suplementami
 - Główne elementy:
   - Siatka kalendarza
   - Komórki dni
-  - Oznaczenia wydarzeń
+  - Oznaczenia suplementów
 - Obsługiwane interakcje:
-  - Kliknięcie w dzień
-  - Przeciąganie wydarzeń
-  - Zaznaczanie zakresu
-- Obsługiwana walidacja:
-  - Sprawdzanie dostępności terminów
-  - Walidacja nakładających się wydarzeń
+  - Hover nad suplementem (tooltip)
+  - Kliknięcie w dzień (wyświetlenie listy suplementów)
 - Typy:
-  - CalendarEvent[]
+  - SupplementCalendarEvent[]
   - DateRange
 - Propsy:
-  - events: CalendarEvent[]
+  - supplements: SupplementCalendarEvent[]
   - viewType: ViewType
-  - onEventClick: (event: CalendarEvent) => void
   - onDateSelect: (date: Date) => void
 
-### EventList
-- Opis: Lista wydarzeń dla wybranego okresu
+### SupplementTooltip
+- Opis: Tooltip wyświetlający szczegóły suplementu
 - Główne elementy:
-  - Lista wydarzeń
-  - Grupowanie po typie
-  - Sortowanie
-- Obsługiwane interakcje:
-  - Wybór wydarzenia
-  - Filtrowanie
-  - Sortowanie
+  - Nazwa suplementu
+  - Dawka i częstotliwość
+  - Status (przyjęty/pominięty)
 - Typy:
-  - CalendarEvent[]
-  - EventGroup
+  - SupplementCalendarEvent
 - Propsy:
-  - events: CalendarEvent[]
-  - onEventSelect: (event: CalendarEvent) => void
-  - onEventUpdate: (event: CalendarEvent) => void
-
-### EventDetails
-- Opis: Panel szczegółów wydarzenia
-- Główne elementy:
-  - Formularz wydarzenia
-  - Przyciski akcji
-  - Historia zmian
-- Obsługiwane interakcje:
-  - Edycja wydarzenia
-  - Usuwanie wydarzenia
-  - Przeglądanie historii
-- Obsługiwana walidacja:
-  - Wymagane pola
-  - Konflikty terminów
-  - Poprawność dat
-- Typy:
-  - CalendarEvent
-  - EventHistory
-- Propsy:
-  - event: CalendarEvent
-  - onSave: (event: CalendarEvent) => void
-  - onDelete: (id: string) => void
+  - supplement: SupplementCalendarEvent
+  - isOpen: boolean
 
 ## 5. Typy
 
-### CalendarEventViewModel
+### SupplementCalendarEvent
 ```typescript
-interface CalendarEventViewModel {
+interface SupplementCalendarEvent {
   id: string;
-  type: 'supplement' | 'medical' | 'visit' | 'test';
-  title: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  status: 'scheduled' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high';
-  category: string;
-  metadata: Record<string, any>;
+  supplementName: string;
+  dosage: string;
+  frequency: string;
+  scheduledDate: Date;
+  status: 'scheduled' | 'taken' | 'missed';
+  userSupplementId: string;
 }
 ```
 
-### FilterOptions
+### SupplementFilterOptions
 ```typescript
-interface FilterOptions {
-  types: string[];
+interface SupplementFilterOptions {
+  supplementIds: string[];
   dateRange: DateRange;
   status: string[];
-  priority: string[];
   search: string;
 }
 ```
 
+### DateRange
+```typescript
+interface DateRange {
+  start: Date;
+  end: Date;
+}
+```
+
 ## 6. Zarządzanie stanem
-- Custom hook `useCalendarEvents` do zarządzania wydarzeniami
+- Custom hook `useSupplementCalendar` do pobierania harmonogramu suplementów
 - Custom hook `useCalendarFilters` do zarządzania filtrami
-- Context `CalendarContext` do współdzielenia stanu kalendarza
-- Local state dla formularzy i interakcji
+- Local state dla widoku i nawigacji
 
 ## 7. Integracja API
-- GET /api/calendar/events - pobieranie wydarzeń
-- POST /api/calendar/events - tworzenie wydarzenia
-- PUT /api/calendar/events/:id - aktualizacja wydarzenia
-- DELETE /api/calendar/events/:id - usuwanie wydarzenia
-- GET /api/calendar/events/history - historia zmian
+- GET /api/supplements/calendar - pobieranie harmonogramu suplementów
+- Wykorzystanie istniejących danych z user-supplements
 
 ## 8. Interakcje użytkownika
-- Przełączanie widoków kalendarza
-- Filtrowanie wydarzeń
-- Dodawanie nowych wydarzeń
-- Edycja istniejących wydarzeń
-- Usuwanie wydarzeń
-- Przeglądanie historii
+- Przełączanie widoków kalendarza (miesiąc/tydzień/dzień)
+- Filtrowanie suplementów
+- Nawigacja między okresami
+- Przeglądanie szczegółów suplementów (tooltip)
 
-## 9. Warunki i walidacja
-- Walidacja dat i zakresów
-- Sprawdzanie konfliktów terminów
-- Weryfikacja uprawnień użytkownika
-- Walidacja formularzy
-- Obsługa limitów API
+## 9. Logika biznesowa
+- Generowanie harmonogramu na podstawie user-supplements
+- Obliczanie dat przyjmowania na podstawie częstotliwości
+- Wyświetlanie statusu suplementów (zaplanowane/przyjęte/pominięte)
 
 ## 10. Obsługa błędów
 - Wyświetlanie komunikatów w toastach
 - Fallback UI dla komponentów
 - Obsługa błędów sieciowych
-- Walidacja danych
 - Error boundaries
 
 ## 11. Kroki implementacji
 1. Przygotowanie struktury komponentów
 2. Implementacja podstawowych widoków kalendarza
 3. Dodanie systemu filtrów
-4. Implementacja zarządzania wydarzeniami
-5. Integracja z API
-6. Dodanie walidacji i obsługi błędów
-7. Testy i optymalizacja
-8. Dokumentacja 
+4. Integracja z API suplementów
+5. Dodanie tooltipów i szczegółów
+6. Obsługa błędów i loading states
+7. Testy i optymalizacja 
