@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { HealthAlertResponse } from "@/types";
+import type { HealthAlertResponse, PaginationResponse } from "@/types";
 import { toast } from "sonner";
 
 export function useAlerts() {
@@ -18,7 +18,18 @@ export function useAlerts() {
         throw new Error("Failed to fetch alerts");
       }
       const data = await response.json();
-      setAlerts(data);
+
+      // Handle both paginated and direct array responses
+      if (data.data && Array.isArray(data.data)) {
+        // Paginated response
+        setAlerts(data.data);
+      } else if (Array.isArray(data)) {
+        // Direct array response
+        setAlerts(data);
+      } else {
+        setAlerts([]);
+      }
+
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Unknown error"));

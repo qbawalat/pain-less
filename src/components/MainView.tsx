@@ -1,9 +1,10 @@
-import { useState } from "react";
 import NavigationBar from "./NavigationBar";
 import HealthStats from "./HealthStats";
 import CalendarWidget from "./CalendarWidget";
 import SupplementList from "./SupplementList";
 import AlertSystem from "./AlertSystem";
+import { ErrorBoundary } from "./ErrorBoundary";
+import { HealthStatsSkeleton, CalendarSkeleton, SupplementListSkeleton, AlertSystemSkeleton } from "./LoadingSkeletons";
 import { useHealthProfile } from "@/lib/hooks/useHealthProfile";
 import { useSupplements } from "@/lib/hooks/useSupplements";
 import { useAlerts } from "@/lib/hooks/useAlerts";
@@ -24,33 +25,58 @@ export default function MainView() {
 
   const { alerts, isLoading: isAlertsLoading, error: alertsError, acknowledgeAlert } = useAlerts();
 
-  if (isProfileLoading || isSupplementsLoading || isAlertsLoading) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
-  }
-
-  if (profileError || supplementsError || alertsError) {
-    return <div className="flex items-center justify-center min-h-screen">Error loading data</div>;
+  // Show global error if all requests fail
+  if (profileError && supplementsError && alertsError) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <NavigationBar />
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold text-destructive">Unable to load data</h2>
+            <p className="text-muted-foreground">Please check your connection and try again.</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <NavigationBar />
+      <ErrorBoundary>
+        <NavigationBar />
+      </ErrorBoundary>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <HealthStats profile={profile} onUpdate={updateProfile} />
+        <ErrorBoundary>
+          {isProfileLoading ? <HealthStatsSkeleton /> : <HealthStats profile={profile} onUpdate={updateProfile} />}
+        </ErrorBoundary>
 
-        <CalendarWidget supplements={supplements} alerts={alerts} />
+        <ErrorBoundary>
+          {isSupplementsLoading || isAlertsLoading ? (
+            <CalendarSkeleton />
+          ) : (
+            <CalendarWidget supplements={supplements} alerts={alerts} />
+          )}
+        </ErrorBoundary>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <SupplementList
-          supplements={supplements}
-          onAdd={addSupplement}
-          onEdit={editSupplement}
-          onDelete={deleteSupplement}
-        />
+        <ErrorBoundary>
+          {isSupplementsLoading ? (
+            <SupplementListSkeleton />
+          ) : (
+            <SupplementList
+              supplements={supplements}
+              onAdd={addSupplement}
+              onEdit={editSupplement}
+              onDelete={deleteSupplement}
+            />
+          )}
+        </ErrorBoundary>
 
-        <AlertSystem alerts={alerts} onAcknowledge={acknowledgeAlert} />
+        <ErrorBoundary>
+          {isAlertsLoading ? <AlertSystemSkeleton /> : <AlertSystem alerts={alerts} onAcknowledge={acknowledgeAlert} />}
+        </ErrorBoundary>
       </div>
     </div>
   );

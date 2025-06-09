@@ -18,7 +18,21 @@ export function useHealthProfile() {
         throw new Error("Failed to fetch health profile");
       }
       const data = await response.json();
-      setProfile(data);
+
+      // Handle both paginated and direct responses
+      if (data.data && !Array.isArray(data.data)) {
+        // Single object in data property
+        setProfile(data.data);
+      } else if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+        // Array in data property, take first item
+        setProfile(data.data[0]);
+      } else if (data.id) {
+        // Direct object response
+        setProfile(data);
+      } else {
+        setProfile(null);
+      }
+
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Unknown error"));

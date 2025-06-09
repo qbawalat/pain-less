@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { UserSupplementResponse, UserSupplementCreate } from "@/types";
+import type { UserSupplementResponse, UserSupplementCreate, PaginationResponse } from "@/types";
 import { toast } from "sonner";
 
 export function useSupplements() {
@@ -17,8 +17,8 @@ export function useSupplements() {
       if (!response.ok) {
         throw new Error("Failed to fetch supplements");
       }
-      const data = await response.json();
-      setSupplements(data);
+      const data: PaginationResponse<UserSupplementResponse> = await response.json();
+      setSupplements(data.data || []);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Unknown error"));
