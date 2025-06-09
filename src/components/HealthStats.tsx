@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { X } from "lucide-react";
 import type { HealthProfileResponse, HealthProfileUpdate } from "@/types";
 
 interface HealthStatsProps {
@@ -20,6 +21,8 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
     medical_conditions: profile?.medical_conditions || [],
     family_conditions: profile?.family_conditions || [],
   });
+  const [newMedicalCondition, setNewMedicalCondition] = useState("");
+  const [newFamilyCondition, setNewFamilyCondition] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +32,26 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
     } catch (error) {
       // Error is handled by the hook
     }
+  };
+
+  const addCondition = (type: "medical_conditions" | "family_conditions", value: string) => {
+    if (!value.trim()) return;
+    setFormData({
+      ...formData,
+      [type]: [...(formData[type] || []), value.trim()],
+    });
+    if (type === "medical_conditions") {
+      setNewMedicalCondition("");
+    } else {
+      setNewFamilyCondition("");
+    }
+  };
+
+  const removeCondition = (type: "medical_conditions" | "family_conditions", index: number) => {
+    setFormData({
+      ...formData,
+      [type]: formData[type]?.filter((_, i) => i !== index) || [],
+    });
   };
 
   const calculateAge = (birthDate: string) => {
@@ -54,7 +77,7 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
           <DialogTrigger asChild>
             <Button variant="outline">Edit</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Edit Health Profile</DialogTitle>
             </DialogHeader>
@@ -102,6 +125,78 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
                   required
                 />
               </div>
+              <div className="space-y-2">
+                <Label>Medical Conditions</Label>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newMedicalCondition}
+                      onChange={(e) => setNewMedicalCondition(e.target.value)}
+                      placeholder="Add a medical condition"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addCondition("medical_conditions", newMedicalCondition);
+                        }
+                      }}
+                    />
+                    <Button type="button" onClick={() => addCondition("medical_conditions", newMedicalCondition)}>
+                      Add
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {formData.medical_conditions?.map((condition, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <span className="flex-1">{condition}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeCondition("medical_conditions", index)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Family History</Label>
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <Input
+                      value={newFamilyCondition}
+                      onChange={(e) => setNewFamilyCondition(e.target.value)}
+                      placeholder="Add a family condition"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addCondition("family_conditions", newFamilyCondition);
+                        }
+                      }}
+                    />
+                    <Button type="button" onClick={() => addCondition("family_conditions", newFamilyCondition)}>
+                      Add
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {formData.family_conditions?.map((condition, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <span className="flex-1">{condition}</span>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeCondition("family_conditions", index)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
               <Button type="submit">Save Changes</Button>
             </form>
           </DialogContent>
@@ -132,7 +227,7 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
 
           <div className="space-y-2">
             <h3 className="font-semibold">Medical Conditions</h3>
-            {profile.medical_conditions.length > 0 ? (
+            {profile.medical_conditions && profile.medical_conditions.length > 0 ? (
               <ul className="list-disc list-inside space-y-1">
                 {profile.medical_conditions.map((condition, index) => (
                   <li key={index} className="text-sm">
@@ -147,7 +242,7 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
 
           <div className="space-y-2">
             <h3 className="font-semibold">Family History</h3>
-            {profile.family_conditions.length > 0 ? (
+            {profile.family_conditions && profile.family_conditions.length > 0 ? (
               <ul className="list-disc list-inside space-y-1">
                 {profile.family_conditions.map((condition, index) => (
                   <li key={index} className="text-sm">
