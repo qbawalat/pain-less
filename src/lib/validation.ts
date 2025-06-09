@@ -25,7 +25,7 @@ export const healthProfileUpdateSchema = z.object({
 export const supplementSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  interactions: z.array(z.string()),
+  interactions: z.array(z.string()).default([]),
 });
 
 // User Supplement Schemas
@@ -35,7 +35,7 @@ export const userSupplementSchema = z.object({
   end_date: z
     .string()
     .transform((str) => new Date(str))
-    .optional(),
+    .nullable(),
   dosage: z.string().min(1),
   frequency: z.string().min(1),
 });

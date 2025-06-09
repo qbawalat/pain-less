@@ -5,7 +5,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SupplementCombobox } from "@/components/ui/supplement-combobox";
+import { useAllSupplements } from "@/lib/hooks/useAllSupplements";
 import type { UserSupplementResponse, UserSupplementCreate } from "@/types";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 
@@ -30,6 +31,9 @@ export default function SupplementList({
     dosage: "",
     frequency: "",
   });
+
+  // Use the new hook for all supplements
+  const { supplements: allSupplements, isLoading: loadingSupplements, createSupplement } = useAllSupplements();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,21 +88,15 @@ export default function SupplementList({
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label htmlFor="supplement">Supplement</Label>
-                <Select
+                <SupplementCombobox
+                  supplements={allSupplements}
                   value={formData.supplement_id}
                   onValueChange={(value) => setFormData({ ...formData, supplement_id: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a supplement" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {supplementsList.map((sup) => (
-                      <SelectItem key={sup.supplement.id} value={sup.supplement.id}>
-                        {sup.supplement.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onCreateSupplement={createSupplement}
+                  placeholder="Select or create supplement..."
+                  disabled={loadingSupplements}
+                />
+                {loadingSupplements && <p className="text-sm text-muted-foreground">Loading supplements...</p>}
               </div>
 
               <div className="space-y-2">
@@ -121,7 +119,7 @@ export default function SupplementList({
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      end_date: e.target.value || null,
+                      end_date: e.target.value ? e.target.value : null,
                     })
                   }
                 />
@@ -133,6 +131,7 @@ export default function SupplementList({
                   id="dosage"
                   value={formData.dosage}
                   onChange={(e) => setFormData({ ...formData, dosage: e.target.value })}
+                  placeholder="e.g., 500mg, 1 tablet, 2 capsules"
                   required
                 />
               </div>
@@ -143,11 +142,14 @@ export default function SupplementList({
                   id="frequency"
                   value={formData.frequency}
                   onChange={(e) => setFormData({ ...formData, frequency: e.target.value })}
+                  placeholder="e.g., Once daily, Twice daily, With meals"
                   required
                 />
               </div>
 
-              <Button type="submit">{isEditing ? "Update Supplement" : "Add Supplement"}</Button>
+              <Button type="submit" disabled={!formData.supplement_id || loadingSupplements} className="w-full">
+                {isEditing ? "Update Supplement" : "Add Supplement"}
+              </Button>
             </form>
           </SheetContent>
         </Sheet>
