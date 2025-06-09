@@ -3,6 +3,7 @@ import HealthStats from "./HealthStats";
 import CalendarWidget from "./CalendarWidget";
 import SupplementList from "./SupplementList";
 import AlertSystem from "./AlertSystem";
+import { AIHealthAnalysisButton } from "./AIHealthAnalysisButton";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { HealthStatsSkeleton, CalendarSkeleton, SupplementListSkeleton, AlertSystemSkeleton } from "./LoadingSkeletons";
 import { useHealthProfile } from "@/lib/hooks/useHealthProfile";
@@ -57,6 +58,13 @@ export default function MainView() {
           ) : (
             <CalendarWidget supplements={supplements} alerts={alerts} />
           )}
+        </ErrorBoundary>
+      </div>
+
+      {/* AI Health Analysis CTA */}
+      <div className="mt-12 mb-8">
+        <ErrorBoundary>
+          <AIHealthAnalysisButton className="bg-card border border-border rounded-lg shadow-sm" />
         </ErrorBoundary>
       </div>
 
