@@ -13,6 +13,9 @@ export default defineConfig({
   server: { port: 3000 },
   vite: {
     plugins: [tailwindcss()],
+    define: {
+      "process.env.OPENROUTER_API_KEY": JSON.stringify(process.env.OPENROUTER_API_KEY),
+    },
   },
   adapter: node({
     mode: "standalone",

@@ -19,6 +19,7 @@ export async function GET(context: APIContext) {
       },
     });
   } catch (error) {
+    console.error("Health analysis error:", error);
     return handleError(error, context);
   }
 }
