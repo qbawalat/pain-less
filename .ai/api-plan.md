@@ -207,7 +207,7 @@
 
 ### AI-Powered Endpoints
 
-#### POST /api/supplement-plans/generate
+#### GET /api/supplement-plans/generate
 - Description: Generate personalized supplement plan
 - Response: 200 OK
 ```json
@@ -226,7 +226,7 @@
 }
 ```
 
-#### POST /api/health-analysis
+#### GET /api/health-analysis
 - Description: Request AI health analysis
 - Response: 200 OK
 ```json
