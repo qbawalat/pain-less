@@ -1,4 +1,3 @@
-import NavigationBar from "./NavigationBar";
 import HealthStats from "./HealthStats";
 import CalendarWidget from "./CalendarWidget";
 import SupplementList from "./SupplementList";
@@ -9,11 +8,18 @@ import { HealthStatsSkeleton, CalendarSkeleton, SupplementListSkeleton, AlertSys
 import { useHealthProfile } from "@/lib/hooks/useHealthProfile";
 import { useSupplements } from "@/lib/hooks/useSupplements";
 import { useAlerts } from "@/lib/hooks/useAlerts";
+import CreateHealthProfile from "./CreateHealthProfile";
 import type { HealthProfileResponse, UserSupplementResponse, HealthAlertResponse } from "@/types";
 
 export default function MainView() {
   // State management using custom hooks
-  const { profile, isLoading: isProfileLoading, error: profileError, updateProfile } = useHealthProfile();
+  const {
+    profile,
+    isLoading: isProfileLoading,
+    error: profileError,
+    updateProfile,
+    refetch: refetchProfile,
+  } = useHealthProfile();
 
   const {
     supplements,
@@ -34,6 +40,25 @@ export default function MainView() {
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold text-destructive">Unable to load data</h2>
             <p className="text-muted-foreground">Please check your connection and try again.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show create profile form if no profile exists
+  if (!isProfileLoading && !profile) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <div className="w-full max-w-2xl">
+            <ErrorBoundary>
+              <CreateHealthProfile
+                onProfileCreated={(newProfile) => {
+                  refetchProfile();
+                }}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       </div>
