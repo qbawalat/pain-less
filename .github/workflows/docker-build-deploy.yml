@@ -69,6 +69,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Validate project configuration
+        run: |
+          # Quick validation without building
+          npm run lint
+          # Add other quick checks here (type checking, etc.)
+          echo "✅ Project configuration validated"
+
       - name: Cache node_modules
         uses: actions/cache/save@v4
         with:
@@ -77,43 +84,9 @@ jobs:
             ~/.npm
           key: ${{ runner.os }}-docker-node-${{ hashFiles('**/package-lock.json') }}
 
-  validate-build:
-    name: Validate Application Build
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
-
-      - name: Restore node_modules
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            node_modules
-            ~/.npm
-          key: ${{ runner.os }}-docker-node-${{ hashFiles('**/package-lock.json') }}
-          fail-on-cache-miss: true
-
-      - name: Build application
-        run: npm run build
-        env:
-          NODE_ENV: ${{ needs.setup.outputs.node_env }}
-
-      - name: Cache build output
-        uses: actions/cache/save@v4
-        with:
-          path: dist
-          key: ${{ runner.os }}-build-${{ github.sha }}
-
   docker-build:
     name: Build Docker Image
-    needs: [setup, validate-build]
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

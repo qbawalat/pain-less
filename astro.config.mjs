@@ -17,9 +17,6 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
-    define: {
-      "process.env.OPENROUTER_API_KEY": JSON.stringify(process.env.OPENROUTER_API_KEY),
-    },
   },
   adapter: node({
     mode: "standalone",

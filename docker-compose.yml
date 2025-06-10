@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   painless-app:
     build:
@@ -10,13 +8,14 @@ services:
         BUILD_ENV: dev
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       - NODE_ENV=development
       - PORT=8080
       - HOST=0.0.0.0
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-    env_file:
-      - .env.local
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "node", "--eval", "

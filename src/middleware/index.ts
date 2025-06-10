@@ -8,12 +8,13 @@ const PROTECTED_ROUTES = ["/", "/calendar", "/profile", "/supplements", "/settin
 
 // Auth routes that should redirect to home if user is already authenticated
 const AUTH_ROUTES = ["/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password"];
-
+const supabaseUrl = process.env.SUPABASE_URL as string;
+const supabaseAnonKey = process.env.SUPABASE_KEY as string;
 export const onRequest = sequence(
   routeNormalizerMiddleware,
   featureFlagsMiddleware,
   defineMiddleware(async (context, next) => {
-    const supabase = createClient(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_KEY, {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,

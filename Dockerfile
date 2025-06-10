@@ -6,10 +6,16 @@ FROM node:22.14.0-alpine AS builder
 # Build arguments for environment configuration
 ARG NODE_ENV=production
 ARG BUILD_ENV=prod
+ARG SUPABASE_URL
+ARG SUPABASE_KEY
+ARG OPENROUTER_API_KEY
 
-# Set environment variables
+# Set environment variables for build process
 ENV NODE_ENV=${NODE_ENV}
 ENV BUILD_ENV=${BUILD_ENV}
+ENV SUPABASE_URL=${SUPABASE_URL}
+ENV SUPABASE_KEY=${SUPABASE_KEY}
+ENV OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
 
 # Add metadata
 LABEL maintainer="painless-app"
@@ -41,7 +47,7 @@ RUN chown -R astro:nodejs /app
 # Switch to non-root user for build
 USER astro
 
-# Build the application
+# Build the application (now with environment variables available)
 RUN npm run build
 
 # Production stage
@@ -76,15 +82,7 @@ EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node --eval "
-const http = require('http');
-const options = { host: 'localhost', port: 8080, timeout: 2000 };
-const request = http.request(options, (res) => { 
-    if (res.statusCode === 200) process.exit(0); 
-    else process.exit(1); 
-});
-request.on('error', () => process.exit(1));
-request.end();" || exit 1
+    CMD node --eval "const http = require('http'); const options = { host: 'localhost', port: 8080, timeout: 2000 }; const request = http.request(options, (res) => { if (res.statusCode === 200) process.exit(0); else process.exit(1); }); request.on('error', () => process.exit(1)); request.end();" || exit 1
 
 # Start the application
 CMD ["dumb-init", "node", "./dist/server/entry.mjs"] 
