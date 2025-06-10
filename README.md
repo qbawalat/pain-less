@@ -126,7 +126,7 @@ Fill in the required environment variables in `.env`:
 ```env
 # Supabase
 SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_KEY=your_SUPABASE_KEY
 
 # Openrouter.ai
 OPENROUTER_API_KEY=your_openrouter_api_key
@@ -168,7 +168,7 @@ npm run preview
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
 | `SUPABASE_URL` | Supabase project URL | Yes | - |
-| `SUPABASE_ANON_KEY` | Supabase anonymous key | Yes | - |
+| `SUPABASE_KEY` | Supabase anonymous key | Yes | - |
 | `OPENROUTER_API_KEY` | Openrouter.ai API key | Yes | - |
 | `NODE_ENV` | Environment | No | development |
 

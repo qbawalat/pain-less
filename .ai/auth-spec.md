@@ -281,7 +281,7 @@ import { createServerClient } from '@supabase/ssr';
 export function createAuthClient(context: APIContext) {
   return createServerClient(
     process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_KEY!,
     {
       cookies: {
         get: (name) => context.cookies.get(name)?.value,
@@ -436,7 +436,7 @@ export function withAuth(handler: (context: APIContext, user: AuthUser) => Promi
 ```bash
 # .env
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 SITE_URL=http://localhost:3000
 ```

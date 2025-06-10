@@ -36,7 +36,7 @@ export function useHealthProfile() {
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err : new Error("Unknown error"));
-      toast.error("Failed to load health profile");
+      toast.error("Let's create your health profile");
     } finally {
       setIsLoading(false);
     }

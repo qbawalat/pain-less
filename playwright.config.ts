@@ -1,4 +1,16 @@
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
+import path from "path";
+
+// Load test environment variables
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+
+// Log environment variables
+console.log("Environment variables loaded:");
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+console.log("SUPABASE_KEY:", process.env.SUPABASE_KEY);
+console.log("OPENROUTER_API_KEY:", process.env.OPENROUTER_API_KEY);
+console.log("NODE_ENV:", process.env.NODE_ENV);
 
 /**
  * @see https://playwright.dev/docs/test-configuration

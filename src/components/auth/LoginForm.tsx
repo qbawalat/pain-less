@@ -59,7 +59,7 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4" data-test-id="login-form">
         <FormField
           control={form.control}
           name="email"
@@ -68,6 +68,7 @@ export function LoginForm() {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
+                  data-test-id="login-email-input"
                   type="email"
                   placeholder="you@example.com"
                   autoComplete="email"
@@ -86,13 +87,19 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" autoComplete="current-password" disabled={isLoading} {...field} />
+                <Input
+                  data-test-id="login-password-input"
+                  type="password"
+                  autoComplete="current-password"
+                  disabled={isLoading}
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading} className="w-full">
+        <Button data-test-id="login-submit-button" type="submit" disabled={isLoading} className="w-full">
           {isLoading ? "Signing in..." : "Sign in"}
         </Button>
       </form>
