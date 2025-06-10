@@ -57,4 +57,7 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
+
+  /* Global teardown to clean up test data */
+  globalTeardown: "./src/tests/global-teardown.ts",
 });

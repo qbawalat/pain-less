@@ -8,7 +8,7 @@ const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL;
 const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD;
 
 test.describe("New User Login Flow", () => {
-  test("should show health profile after successful login", async ({ page }) => {
+  test("should create health profile after successful login", async ({ page }) => {
     // Initialize page objects
     const loginPage = new LoginPage(page);
     const dashboardPage = new MainDashboardPage(page);
@@ -47,6 +47,14 @@ test.describe("New User Login Flow", () => {
     const familyConditions = await healthProfilePage.getSelectedFamilyConditions();
     expect(familyConditions).toContain("Diabetes");
     expect(familyConditions).toContain("Heart disease");
+
+    // Step 8: Submit the form
+    await healthProfilePage.submit();
+
+    // Step 9: Verify we're redirected to the main dashboard
+    await dashboardPage.waitForDashboard();
+    expect(await dashboardPage.isDashboardVisible()).toBeTruthy();
+    expect(await dashboardPage.isCreateProfileVisible()).toBeFalsy();
   });
 
   test("should handle invalid login credentials", async ({ page }) => {
