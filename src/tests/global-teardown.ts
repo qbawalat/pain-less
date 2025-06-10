@@ -4,22 +4,27 @@ async function globalTeardown() {
   console.log("Starting global teardown...");
 
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_KEY;
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY;
   const e2eUserId = process.env.TEST_USER_UID;
 
-  if (!supabaseUrl || !supabaseKey) {
+  if (!supabaseUrl || !supabaseServiceKey) {
     console.error("Missing Supabase credentials:");
     console.error("SUPABASE_URL:", supabaseUrl ? "present" : "missing");
-    console.error("SUPABASE_KEY:", supabaseKey ? "present" : "missing");
+    console.error("SUPABASE_SERVICE_KEY:", supabaseServiceKey ? "present" : "missing");
     throw new Error("Missing Supabase credentials");
   }
 
-  console.log("Initializing Supabase client...");
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  console.log("Initializing Supabase client with service role...");
+  const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
 
   // List of tables to clean up (excluding auth.users)
   const tablesToClean = ["health_profiles"];
-  // const tablesToClean = ["health_alerts", "health_profiles", "supplements", "user_supplements"];
+  // const tablesToClean = ["health_profiles", "health_alerts", "user_supplements"];
 
   for (const table of tablesToClean) {
     try {
