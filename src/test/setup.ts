@@ -1,14 +1,32 @@
 import "@testing-library/jest-dom";
-import { expect, afterEach, vi } from "vitest";
+import { expect, afterEach } from "vitest";
 import { cleanup } from "@testing-library/react";
+import * as matchers from "@testing-library/jest-dom/matchers";
+import { vi } from "vitest";
 
-// Extends Vitest's expect method with methods from react-testing-library
-expect.extend({});
+// Rozszerzamy expect o matchery testing-library
+expect.extend(matchers);
 
-// Runs a cleanup after each test case (e.g. clearing jsdom)
+// Czyszczenie po każdym teście
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
 });
+
+// Mock dla window.location
+const mockLocation = {
+  href: "",
+};
+
+vi.stubGlobal("location", mockLocation);
+
+// Mock dla toast notifications
+vi.mock("sonner", () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
 
 // Mock dla środowiska Node.js
 Object.defineProperty(window, "matchMedia", {
