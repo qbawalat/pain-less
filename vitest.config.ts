@@ -17,7 +17,7 @@ export default defineConfig({
       "**/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build}.config.*",
     ],
     coverage: {
-      reporter: ["text", "json", "html"],
+      reporter: ["text", "json", "html", "lcov"],
       exclude: ["node_modules/", "src/test/", "**/*.d.ts", "**/*.config.*", "**/types.ts"],
     },
   },
