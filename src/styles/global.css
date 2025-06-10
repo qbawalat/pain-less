@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -20,6 +24,7 @@
   --accent: #22c55e; /* green accent */
   --accent-foreground: #181c1f;
   --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
   --border: #23272a; /* dark border */
   --input: #23272a;
   --ring: #22c55e;
@@ -54,6 +59,7 @@
   --accent: #22c55e;
   --accent-foreground: #134e4a;
   --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
   --border: #e3e3e3;
   --input: #e0e7e3;
   --ring: #22c55e;
@@ -92,6 +98,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

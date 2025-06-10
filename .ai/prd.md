@@ -94,6 +94,7 @@ Kryteria akceptacji:
 - Użytkownik otrzymuje email weryfikacyjny
 - Użytkownik może się zalogować po weryfikacji
 - Użytkownik ma dostęp tylko do swoich danych
+- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
 
 ### US-002: Aktualizacja profilu zdrowotnego
 Jako użytkownik chcę aktualizować swój profil zdrowotny, aby system mógł generować trafne rekomendacje.
@@ -103,6 +104,7 @@ Kryteria akceptacji:
 - Użytkownik może dodać choroby rodzinne
 - Użytkownik może dodać suplementy
 - Użytkownik może dodać wyniki badań
+- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
 
 ### US-003: Przeglądanie kalendarza
 Jako użytkownik chcę przeglądać swój kalendarz zdrowotny, aby śledzić wydarzenia.
@@ -111,6 +113,7 @@ Kryteria akceptacji:
 - Kalendarz pokazuje wydarzenia z profilu
 - Wydarzenia są poprawnie oznaczone (95% dokładność)
 - Użytkownik widzi okresy suplementacji
+- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
 
 ### US-004: Generowanie planu suplementacji
 Jako użytkownik chcę otrzymać spersonalizowany plan suplementacji.
@@ -121,6 +124,7 @@ Kryteria akceptacji:
 - System wykrywa potencjalne interakcje
 - System pokazuje wskaźnik pewności AI
 - Użytkownik może zaakceptować lub odrzucić plan
+- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
 
 ### US-005: Otrzymywanie alertów
 Jako użytkownik chcę otrzymywać alerty o potencjalnych zagrożeniach.
@@ -129,6 +133,21 @@ Kryteria akceptacji:
 - System wysyła alerty o interakcjach
 - Alerty mają odpowiedni poziom (informacyjny/ostrzegawczy)
 - Użytkownik musi potwierdzić ostrzeżenia
+- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
+
+### US-006: Bezpieczny dostęp i uwierzytelnianie
+
+- Tytuł: Bezpieczny dostęp
+- Opis: Jako użytkownik chcę mieć możliwość rejestracji i logowania się do systemu w sposób zapewniający bezpieczeństwo moich danych.
+- Kryteria akceptacji:
+  - Logowanie i rejestracja odbywają się na dedykowanych stronach.
+  - Logowanie wymaga podania adresu email i hasła.
+  - Rejestracja wymaga podania adresu email, hasła i potwierdzenia hasła.
+  - Użytkownik NIE MOŻE korzystać z zadnych featureow bez logowania się do systemu (US-001, US-002, US-003, US-004, US-005).
+  - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
+  - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w navbarze
+  - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
+  - Odzyskiwanie hasła powinno być możliwe.
 
 ## 6. Metryki sukcesu
 

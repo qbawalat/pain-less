@@ -1,0 +1,12 @@
+---
+import Layout from "./Layout.astro"
+import { ViewTransitions } from 'astro:transitions'
+import "../styles/global.css"
+---
+
+<Layout>
+  <ViewTransitions />
+  <main class="container flex min-h-screen items-center justify-center bg-background">
+    <slot />
+  </main>
+</Layout> 
