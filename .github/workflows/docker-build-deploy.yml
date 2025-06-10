@@ -1,0 +1,286 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened]
+
+env:
+  REGISTRY: registry.digitalocean.com
+  IMAGE_NAME: painless-app
+
+jobs:
+  setup:
+    name: Setup and Validate
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+      node_env: ${{ steps.env.outputs.node_env }}
+      commit_sha: ${{ steps.env.outputs.commit_sha }}
+      version_tag: ${{ steps.env.outputs.version_tag }}
+      latest_tag: ${{ steps.env.outputs.latest_tag }}
+      should_deploy: ${{ steps.env.outputs.should_deploy }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Set environment variables
+        id: env
+        run: |
+          # Determine environment based on branch
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            echo "environment=prod" >> $GITHUB_OUTPUT
+            echo "node_env=production" >> $GITHUB_OUTPUT
+            echo "should_deploy=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            echo "environment=dev" >> $GITHUB_OUTPUT
+            echo "node_env=development" >> $GITHUB_OUTPUT
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          else
+            echo "environment=pr" >> $GITHUB_OUTPUT
+            echo "node_env=development" >> $GITHUB_OUTPUT
+            echo "should_deploy=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Set image tags
+          COMMIT_SHA=$(echo ${{ github.sha }} | cut -c1-8)
+          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          
+          ENVIRONMENT=$(echo "${{ github.ref_name }}" | sed 's/master/prod/; s/develop/dev/; s/.*/pr/' | head -1)
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            ENVIRONMENT="prod"
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            ENVIRONMENT="dev"
+          else
+            ENVIRONMENT="pr"
+          fi
+          
+          echo "version_tag=${{ env.REGISTRY }}/${{ secrets.DO_REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${ENVIRONMENT}-${COMMIT_SHA}" >> $GITHUB_OUTPUT
+          echo "latest_tag=${{ env.REGISTRY }}/${{ secrets.DO_REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:${ENVIRONMENT}-latest" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache node_modules
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-docker-node-${{ hashFiles('**/package-lock.json') }}
+
+  validate-build:
+    name: Validate Application Build
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - name: Restore node_modules
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            node_modules
+            ~/.npm
+          key: ${{ runner.os }}-docker-node-${{ hashFiles('**/package-lock.json') }}
+          fail-on-cache-miss: true
+
+      - name: Build application
+        run: npm run build
+        env:
+          NODE_ENV: ${{ needs.setup.outputs.node_env }}
+
+      - name: Cache build output
+        uses: actions/cache/save@v4
+        with:
+          path: dist
+          key: ${{ runner.os }}-build-${{ github.sha }}
+
+  docker-build:
+    name: Build Docker Image
+    needs: [setup, validate-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to DigitalOcean Container Registry
+        if: needs.setup.outputs.environment == 'prod' && github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DO_REGISTRY_TOKEN }}
+          password: ${{ secrets.DO_REGISTRY_TOKEN }}
+
+      - name: Extract metadata for production
+        if: needs.setup.outputs.environment == 'prod' && github.event_name == 'push'
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ secrets.DO_REGISTRY_NAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ needs.setup.outputs.environment }}-${{ needs.setup.outputs.commit_sha }}
+            type=raw,value=${{ needs.setup.outputs.environment }}-latest
+
+      - name: Build and push production Docker image
+        if: needs.setup.outputs.environment == 'prod' && github.event_name == 'push'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NODE_ENV=${{ needs.setup.outputs.node_env }}
+            BUILD_ENV=${{ needs.setup.outputs.environment }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build development/PR Docker image (no push)
+        if: needs.setup.outputs.environment != 'prod' || github.event_name == 'pull_request'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          push: false
+          tags: local-${{ env.IMAGE_NAME }}:${{ needs.setup.outputs.environment }}-${{ needs.setup.outputs.commit_sha }}
+          build-args: |
+            NODE_ENV=${{ needs.setup.outputs.node_env }}
+            BUILD_ENV=${{ needs.setup.outputs.environment }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scanner (production only)
+        if: needs.setup.outputs.environment == 'prod' && github.event_name == 'push'
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ needs.setup.outputs.version_tag }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        if: needs.setup.outputs.environment == 'prod' && github.event_name == 'push'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Comment PR with build results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `#### 🐳 Docker Build Results
+            
+            **Branch:** \`${{ github.ref_name }}\`
+            **Environment:** \`${{ needs.setup.outputs.environment }}\`
+            **Commit SHA:** \`${{ needs.setup.outputs.commit_sha }}\`
+            
+            ✅ **Docker build completed successfully!**
+            
+            📦 **Local Build:** \`local-${{ env.IMAGE_NAME }}:${{ needs.setup.outputs.environment }}-${{ needs.setup.outputs.commit_sha }}\`
+            
+            > 💡 **Note:** Images are only pushed to DigitalOcean Container Registry from the \`master\` branch. This PR build validates the Docker configuration without uploading to the registry.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Comment develop branch build results
+        if: github.event_name == 'push' && needs.setup.outputs.environment == 'dev'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `#### 🐳 Development Build Results
+            
+            **Branch:** \`${{ github.ref_name }}\`
+            **Environment:** \`${{ needs.setup.outputs.environment }}\`
+            **Commit SHA:** \`${{ needs.setup.outputs.commit_sha }}\`
+            
+            ✅ **Docker build completed successfully!**
+            
+            📦 **Local Build:** \`local-${{ env.IMAGE_NAME }}:${{ needs.setup.outputs.environment }}-${{ needs.setup.outputs.commit_sha }}\`
+            
+            > 💡 **Note:** Development builds validate the Docker configuration but are not pushed to DigitalOcean Container Registry. Only production builds (master branch) are uploaded to the registry.`;
+            
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: output
+            });
+
+  # deploy-to-app-platform:
+  #   name: Deploy to Production
+  #   needs: [setup, docker-build]
+  #   runs-on: ubuntu-latest
+  #   if: needs.setup.outputs.should_deploy == 'true' && github.event_name == 'push'
+    
+  #   steps:
+  #   - name: Deploy to DigitalOcean App Platform
+  #     uses: digitalocean/app_action@v2
+  #     with:
+  #       app_name: ${{ secrets.DO_APP_NAME }}
+  #       token: ${{ secrets.DO_API_TOKEN }}
+  #       images: |
+  #         [{
+  #           "name": "painless-app",
+  #           "image": {
+  #             "registry_type": "DOCR",
+  #             "repository": "${{ secrets.DO_REGISTRY_NAME }}/${{ env.IMAGE_NAME }}",
+  #             "tag": "${{ needs.setup.outputs.environment }}-${{ needs.setup.outputs.commit_sha }}"
+  #           }
+  #         }]
+
+  status-comment:
+    name: Deployment Status Comment
+    needs: [setup, docker-build]
+    runs-on: ubuntu-latest
+    if: always() && needs.setup.outputs.should_deploy == 'true'
+    permissions:
+      contents: write
+    steps:
+      - name: Notify deployment status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployStatus = '${{ needs.deploy-to-app-platform.result }}';
+            const status = deployStatus === 'success' ? '✅ Deployed' : '❌ Failed';
+            const output = `### 🚀 Production Deployment
+            
+            **Status:** ${status}
+            **Environment:** Production
+            **Image:** \`${{ needs.setup.outputs.version_tag }}\`
+            **App:** ${{ secrets.DO_APP_NAME }}
+            
+            ${status === '✅ Deployed' ? 
+              '🎉 Your application has been successfully deployed to production!' : 
+              '💥 Deployment failed. Check the workflow logs for details.'}`;
+            
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: output
+            }); 
