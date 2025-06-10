@@ -30,7 +30,6 @@ export default function MainView() {
   if (profileError && supplementsError && alertsError) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <NavigationBar />
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold text-destructive">Unable to load data</h2>
@@ -43,10 +42,6 @@ export default function MainView() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <ErrorBoundary>
-        <NavigationBar />
-      </ErrorBoundary>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <ErrorBoundary>
           {isProfileLoading ? <HealthStatsSkeleton /> : <HealthStats profile={profile} onUpdate={updateProfile} />}

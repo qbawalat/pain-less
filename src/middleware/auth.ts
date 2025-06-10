@@ -14,15 +14,17 @@ export class ForbiddenError extends Error {
   }
 }
 
-// Hardcoded user for POC
-const POC_USER = {
-  id: "b8d7c922-9f3f-4796-9742-b1b39e0ac588",
-  email: "diego@gmail.com",
-};
-
 export function getCurrentUser(context: APIContext) {
-  // TODO: Implement proper JWT validation and session management
-  return POC_USER;
+  const user = context.locals.user;
+
+  if (!user) {
+    return null;
+  }
+
+  return {
+    id: user.id,
+    email: user.email,
+  };
 }
 
 export function requireAuth(context: APIContext) {

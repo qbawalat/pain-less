@@ -9,8 +9,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell } from "lucide-react";
+import { toast } from "sonner";
 
 export default function NavigationBar() {
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to log out");
+      }
+
+      // Redirect to login page
+      window.location.href = "/auth/login";
+    } catch (error) {
+      toast.error("Failed to log out. Please try again.");
+    }
+  };
+
   return (
     <nav className="border-b" role="navigation" aria-label="Main navigation">
       <div className="container mx-auto px-4 py-4">
@@ -38,10 +56,14 @@ export default function NavigationBar() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/profile">Profile</a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href="/settings">Settings</a>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
+                <DropdownMenuItem onSelect={handleLogout}>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

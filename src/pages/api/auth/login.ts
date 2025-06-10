@@ -6,7 +6,7 @@ const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, cookies }) => {
   try {
     const body = await request.json();
     const { email, password } = loginSchema.parse(body);
@@ -25,13 +25,22 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
-    return new Response(
+    // Set auth cookie
+    const response = new Response(
       JSON.stringify({
         user: data.user,
         session: data.session,
       }),
       { status: 200 }
     );
+
+    // Set session cookie with proper attributes
+    response.headers.set(
+      "Set-Cookie",
+      `sb-auth-token=${data.session?.access_token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${60 * 60 * 24 * 7}` // 7 days
+    );
+
+    return response;
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(

@@ -35,6 +35,7 @@ export function LoginForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        credentials: "include", // Important for cookies
       });
 
       const result = await response.json();
@@ -45,11 +46,10 @@ export function LoginForm() {
 
       toast.success("Successfully signed in!");
 
-      // Get redirect URL from query params or default to home
-      const params = new URLSearchParams(window.location.search);
-      const redirectTo = params.get("redirect") || "/";
-
-      window.location.href = redirectTo;
+      // Small delay to ensure cookie is set
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 100);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {
