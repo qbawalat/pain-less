@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight, Filter, RotateCcw } from "lucide-react";
-import type { ViewType, SupplementFilterOptions, DateRange } from "@/types";
+import type { ViewType, SupplementFilterOptions } from "@/types";
 
 interface CalendarHeaderProps {
   currentView: ViewType;
@@ -48,12 +48,13 @@ export function CalendarHeader({
         options.year = "numeric";
         options.month = "long";
         break;
-      case "week":
+      case "week": {
         const weekStart = new Date(selectedDate);
         const weekEnd = new Date(selectedDate);
         weekStart.setDate(weekStart.getDate() - weekStart.getDay());
         weekEnd.setDate(weekStart.getDate() + 6);
         return `${weekStart.toLocaleDateString()} - ${weekEnd.toLocaleDateString()}`;
+      }
       case "day":
         options.year = "numeric";
         options.month = "long";

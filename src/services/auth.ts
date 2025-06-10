@@ -1,4 +1,4 @@
-import type { LoginFormValues, AuthError } from "@/types/auth";
+import type { LoginFormValues } from "@/types/auth";
 
 class AuthService {
   private async request<T>(endpoint: string, data: unknown): Promise<T> {

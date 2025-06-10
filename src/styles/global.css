@@ -43,7 +43,8 @@
   --sidebar-ring: #22c55e;
 }
 
-.light, .light-theme {
+.light,
+.light-theme {
   --background: #f7f7fa;
   --foreground: #22372b;
   --card: #ffffff;

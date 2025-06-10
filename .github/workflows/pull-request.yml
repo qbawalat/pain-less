@@ -16,8 +16,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -36,8 +36,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -67,8 +67,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -110,17 +110,17 @@ jobs:
         with:
           script: |
             const { context } = require('@actions/core');
-            
+
             const body = `## ✅ CI Pipeline Success
-            
+
             All checks have passed successfully!
-            
+
             - ✅ **Linting**: Code follows project standards
             - ✅ **Unit Tests**: All unit tests passed with coverage
             - ✅ **E2E Tests**: All end-to-end tests passed
-            
+
             This PR is ready for review! 🚀`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
@@ -141,24 +141,24 @@ jobs:
         with:
           script: |
             const { context } = require('@actions/core');
-            
+
             const lintStatus = '${{ needs.lint.result }}' === 'success' ? '✅' : '❌';
             const unitStatus = '${{ needs.unit-tests.result }}' === 'success' ? '✅' : '❌';
             const e2eStatus = '${{ needs.e2e-tests.result }}' === 'success' ? '✅' : '❌';
-            
+
             const body = `## ❌ CI Pipeline Failed
-            
+
             Some checks have failed. Please review and fix the issues:
-            
+
             - ${lintStatus} **Linting**: ${{ needs.lint.result }}
             - ${unitStatus} **Unit Tests**: ${{ needs.unit-tests.result }}
             - ${e2eStatus} **E2E Tests**: ${{ needs.e2e-tests.result }}
-            
+
             Please check the logs above and fix the failing tests before proceeding.`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.payload.pull_request.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: body
-            }); 
+            });

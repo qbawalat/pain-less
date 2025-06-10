@@ -7,6 +7,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
 ## 2. Lista widoków
 
 ### 2.1 Widok główny (/)
+
 - **Główny cel**: Prezentacja kompleksowego profilu zdrowotnego użytkownika z możliwością AI analizy
 - **Kluczowe informacje**:
   - Podstawowe dane zdrowotne (waga, wzrost, wiek)
@@ -35,6 +36,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
   - Animacje i feedback dla lepszego UX
 
 ### 2.2 Rozszerzony kalendarz (/calendar)
+
 - **Główny cel**: Szczegółowy widok wydarzeń zdrowotnych
 - **Kluczowe informacje**:
   - Pełny kalendarz z oznaczeniami wydarzeń
@@ -50,6 +52,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
   - Wsparcie dla czytników ekranu
 
 ### 2.3 Ustawienia użytkownika (/settings)
+
 - **Główny cel**: Zarządzanie preferencjami i danymi użytkownika
 - **Kluczowe informacje**:
   - Dane osobowe
@@ -65,6 +68,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
   - Jasne opisy ustawień
 
 ### 2.4 Wyniki badań (/medical-results)
+
 - **Główny cel**: Zarządzanie i przegląd wyników badań
 - **Kluczowe informacje**:
   - Historia badań
@@ -82,6 +86,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
 ## 3. Mapa podróży użytkownika
 
 ### 3.1 Główny przepływ
+
 1. Logowanie/Rejestracja
 2. Widok główny z profilem zdrowotnym
 3. **Interakcja z AI analizą** (nowy kluczowy punkt):
@@ -105,18 +110,21 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
 ## 4. Układ i struktura nawigacji
 
 ### 4.1 Główna nawigacja
+
 - Pasek nawigacyjny z logo i menu
 - System toastów dla alertów
 - Szybki dostęp do kluczowych funkcji
 - **Centralny przycisk AI - główny CTA ekranu**
 
 ### 4.2 Struktura menu
+
 - Profil (strona główna)
 - Kalendarz
 - Ustawienia
 - Wyniki badań
 
 ### 4.3 Nawigacja kontekstowa
+
 - Breadcrumbs dla głębszych widoków
 - Szybki powrót do widoku głównego
 - Filtry i wyszukiwanie
@@ -124,6 +132,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
 ## 5. Kluczowe komponenty
 
 ### 5.1 Komponenty wspólne
+
 - **NavigationBar**: Główna nawigacja z systemem toastów
 - **HealthStats**: Panel statystyk zdrowotnych w stylu Pip-Boy
 - **AIHealthAnalysisButton**: Centralny przycisk do generowania AI analizy zdrowotnej
@@ -135,6 +144,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
 - **ErrorBoundaries**: Obsługa błędów i wyjątków
 
 ### 5.2 Komponenty specjalistyczne
+
 - **AIPrompt**: Interfejs generowania planu suplementacji
 - **AIAnalysisModal**: Modal do wyświetlania wyników AI analizy zdrowotnej
 - **MedicalResultsTable**: Tabela wyników badań
@@ -144,6 +154,7 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
 ## 6. AI Health Analysis - szczegóły implementacji
 
 ### 6.1 AIHealthAnalysisButton
+
 - **Położenie**: Centrum ekranu, między sekcją HealthStats a resztą komponentów
 - **Wygląd**: Duży, prominentny przycisk w stylu Pip-Boy z ikoną AI/mózgu
 - **Tekst**: "Ask AI for Health Analysis" / "Poproś AI o analizę zdrowia"
@@ -154,14 +165,16 @@ pAIN-less to aplikacja webowa z interfejsem inspirowanym Pip-Boy z Fallout, ofer
   - Error: Stan błędu z możliwością ponownej próby
 
 ### 6.2 Integracja z API
+
 - **Endpoint**: `/api/kindly-ask-for/health-analysis`
 - **Metoda**: GET request
 - **Obsługa błędów**: Toast notifications + retry option
 - **Wyniki**: Modal z analizą AI lub toast z kluczowymi insights
 
 ### 6.3 UX Flow
+
 1. Użytkownik widzi centralny przycisk na home screen
 2. Klik aktywuje loading state
 3. Request do AI endpoint
 4. Wyświetlenie wyników w czytelnej formie
-5. Opcje działań na podstawie analizy (dodaj supplement, umów wizytę, etc.) 
+5. Opcje działań na podstawie analizy (dodaj supplement, umów wizytę, etc.)

@@ -29,7 +29,7 @@ export default function HealthStats({ profile, onUpdate }: HealthStatsProps) {
     try {
       await onUpdate(formData);
       setIsEditing(false);
-    } catch (error) {
+    } catch {
       // Error is handled by the hook
     }
   };

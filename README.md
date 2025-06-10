@@ -47,6 +47,7 @@ pAIN-less is a web application that helps users manage their health information 
 ## Features
 
 ### Health Profile
+
 - Medical history and injuries tracking
 - Family medical history
 - Supplement list management
@@ -54,11 +55,13 @@ pAIN-less is a web application that helps users manage their health information 
 - Monthly update reminders
 
 ### Health Calendar
+
 - Automatic event marking from profile
 - Supplementation period visualization
 - 95% accuracy in event marking
 
 ### AI-Powered Supplementation System
+
 - Health data analysis
 - Personalized recommendations
 - Potential interaction detection
@@ -66,6 +69,7 @@ pAIN-less is a web application that helps users manage their health information 
 - Plan verification and acceptance process
 
 ### Health Alerts Panel
+
 - Regular AI health state analysis
 - Potential risk warnings
 - Two-level alert system (informational/warning)
@@ -73,6 +77,7 @@ pAIN-less is a web application that helps users manage their health information 
 ## Tech Stack
 
 ### Frontend
+
 - Astro 5 for fast, efficient page generation
 - React 19 for interactive components
 - TypeScript 5 for static typing
@@ -80,15 +85,18 @@ pAIN-less is a web application that helps users manage their health information 
 - Shadcn/ui for UI components
 
 ### Backend
+
 - Supabase as Backend-as-a-Service
 - PostgreSQL database
 - Built-in Supabase authentication
 
 ### AI
+
 - Openrouter.ai for AI model communication
 - Access to various models (OpenAI, Anthropic, Google)
 
 ### Infrastructure
+
 - GitHub Actions for CI/CD
 - DigitalOcean for hosting
 - Docker for containerization
@@ -98,6 +106,7 @@ pAIN-less is a web application that helps users manage their health information 
 ### Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - Node.js (v18.x or later)
 - Docker (v20.x or later)
 - Git
@@ -108,21 +117,26 @@ Before you begin, ensure you have the following installed:
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/qbawalat/pain-less.git
 cd pain-less
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 ```
+
 Fill in the required environment variables in `.env`:
+
 ```env
 # Supabase
 SUPABASE_URL=your_supabase_url
@@ -136,6 +150,7 @@ NODE_ENV=development
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -143,6 +158,7 @@ npm run dev
 ## Development
 
 ### Running Tests
+
 ```bash
 # Run all tests
 npm test
@@ -155,6 +171,7 @@ npm run test:coverage
 ```
 
 ### Building for Production
+
 ```bash
 # Build the application
 npm run build
@@ -165,12 +182,12 @@ npm run preview
 
 ### Environment Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `SUPABASE_URL` | Supabase project URL | Yes | - |
-| `SUPABASE_KEY` | Supabase anonymous key | Yes | - |
-| `OPENROUTER_API_KEY` | Openrouter.ai API key | Yes | - |
-| `NODE_ENV` | Environment | No | development |
+| Variable             | Description            | Required | Default     |
+| -------------------- | ---------------------- | -------- | ----------- |
+| `SUPABASE_URL`       | Supabase project URL   | Yes      | -           |
+| `SUPABASE_KEY`       | Supabase anonymous key | Yes      | -           |
+| `OPENROUTER_API_KEY` | Openrouter.ai API key  | Yes      | -           |
+| `NODE_ENV`           | Environment            | No       | development |
 
 ## Architecture
 
@@ -200,11 +217,13 @@ src/
 ### Common Issues
 
 1. **Database Connection Issues**
+
    - Verify Supabase credentials in `.env`
    - Check network connectivity
    - Ensure database is running
 
 2. **AI Service Issues**
+
    - Verify Openrouter.ai API key
    - Check API rate limits
    - Verify internet connection
@@ -256,6 +275,7 @@ We are committed to making participation in this project a harassment-free exper
 ## Changelog
 
 ### [1.0.0] - 2024-03-XX
+
 - Initial release
 - Basic health profile management
 - AI-powered supplementation system

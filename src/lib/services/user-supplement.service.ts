@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "../../db/database.types";
+import type { Database } from "@/db/database.types";
 import type {
   UserSupplementCreate,
   UserSupplementResponse,
@@ -7,6 +7,11 @@ import type {
   UserSupplementUpdate,
 } from "../../types";
 import { NotFoundError } from "../errors";
+
+// Type for the joined data from Supabase
+type UserSupplementWithJoins = Database["public"]["Tables"]["user_supplements"]["Row"] & {
+  supplement: Pick<Database["public"]["Tables"]["supplements"]["Row"], "id" | "name" | "description">;
+};
 
 export class UserSupplementService {
   constructor(
@@ -121,7 +126,7 @@ export class UserSupplementService {
     }
   }
 
-  private mapToResponse(userSupplement: any): UserSupplementResponse {
+  private mapToResponse(userSupplement: UserSupplementWithJoins): UserSupplementResponse {
     return {
       id: userSupplement.id,
       supplement: {

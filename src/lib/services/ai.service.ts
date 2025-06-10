@@ -1,14 +1,19 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../../db/database.types";
-import type { SupplementPlanResponse, HealthAnalysisResponse } from "../../types";
+import type {
+  SupplementPlanResponse,
+  HealthAnalysisResponse,
+  HealthProfileResponse,
+  UserSupplementResponse,
+} from "../../types";
 import { OpenRouterService } from "./openrouter.service";
 import { HealthDataService } from "./health-data.service";
 
 export class AIService {
   private readonly openRouter: OpenRouterService;
   private readonly healthDataService: HealthDataService;
-  public healthProfile: any = null;
-  public supplements: any[] = [];
+  public healthProfile: HealthProfileResponse | null = null;
+  public supplements: UserSupplementResponse[] = [];
 
   constructor(
     private readonly supabase: SupabaseClient<Database>,

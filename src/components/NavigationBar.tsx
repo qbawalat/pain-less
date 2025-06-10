@@ -24,7 +24,7 @@ export default function NavigationBar() {
 
       // Redirect to login page
       window.location.href = "/auth/login";
-    } catch (error) {
+    } catch {
       toast.error("Failed to log out. Please try again.");
     }
   };

@@ -1,5 +1,4 @@
 import { FullConfig } from "@playwright/test";
-import { config } from "dotenv";
 import { resolve } from "path";
 
 async function globalSetup(config: FullConfig) {

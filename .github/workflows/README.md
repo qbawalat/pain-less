@@ -10,15 +10,15 @@ W ustawieniach repozytorium należy skonfigurować następujące sekrety dla śr
 
 ```bash
 # Supabase Configuration
-SUPABASE_URL=### 
-SUPABASE_KEY=### 
+SUPABASE_URL=###
+SUPABASE_KEY=###
 
 # OpenRouter AI API Configuration
-OPENROUTER_API_KEY=### 
+OPENROUTER_API_KEY=###
 
 # E2E Test User Configuration
-TEST_USER_EMAIL=###for e2e 
-TEST_USER_PASSWORD=###for e2e 
+TEST_USER_EMAIL=###for e2e
+TEST_USER_PASSWORD=###for e2e
 TEST_USER_UID=###for e2e
 ```
 
@@ -34,4 +34,4 @@ TEST_USER_UID=###for e2e
 - Node.js wg `.nvmrc`
 - npm dla zarządzania zależnościami
 - Playwright dla testów E2E
-- Codecov dla raportowania pokrycia kodu 
+- Codecov dla raportowania pokrycia kodu

@@ -25,7 +25,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (authToken) {
     const {
       data: { session },
-      error,
     } = await supabase.auth.setSession({
       access_token: authToken,
       refresh_token: authToken,

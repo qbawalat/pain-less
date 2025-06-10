@@ -9,7 +9,6 @@ import { useHealthProfile } from "@/lib/hooks/useHealthProfile";
 import { useSupplements } from "@/lib/hooks/useSupplements";
 import { useAlerts } from "@/lib/hooks/useAlerts";
 import CreateHealthProfile from "./CreateHealthProfile";
-import type { HealthProfileResponse, UserSupplementResponse, HealthAlertResponse } from "@/types";
 
 export default function MainView() {
   // State management using custom hooks
@@ -60,7 +59,7 @@ export default function MainView() {
           <div className="w-full max-w-2xl">
             <ErrorBoundary>
               <CreateHealthProfile
-                onProfileCreated={(newProfile) => {
+                onProfileCreated={() => {
                   refetchProfile();
                 }}
               />

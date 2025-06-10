@@ -40,10 +40,12 @@ export function CalendarGrid({ supplements, viewType, selectedDate, onDateSelect
     const isSelected = date.toDateString() === selectedDate.toDateString();
 
     return (
-      <div
+      <button
         key={date.toISOString()}
+        type="button"
+        aria-label={`Select ${date.toLocaleDateString()}`}
         className={cn(
-          "min-h-[120px] p-2 border border-border cursor-pointer hover:bg-muted/50 transition-colors",
+          "min-h-[120px] p-2 border border-border cursor-pointer hover:bg-muted/50 transition-colors w-full text-left",
           !isCurrentMonth && "text-muted-foreground bg-muted/20",
           isToday && "bg-primary/10 border-primary/30",
           isSelected && "ring-2 ring-primary"
@@ -72,7 +74,7 @@ export function CalendarGrid({ supplements, viewType, selectedDate, onDateSelect
             <div className="text-xs text-muted-foreground">+{daySupplements.length - 3} more</div>
           )}
         </div>
-      </div>
+      </button>
     );
   };
 

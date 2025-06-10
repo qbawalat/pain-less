@@ -72,7 +72,7 @@ export default function SupplementList({
         frequency: "",
       });
       setCustomFrequency("");
-    } catch (error) {
+    } catch {
       // Error is handled by the hook
     }
   };

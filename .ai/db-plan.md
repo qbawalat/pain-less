@@ -3,6 +3,7 @@
 ## Tables
 
 ### 1. users (Supabase Auth)
+
 ```sql
 -- Managed by Supabase Auth
 -- Table: auth.users
@@ -11,6 +12,7 @@
 ```
 
 ### 2. health_profiles
+
 ```sql
 CREATE TABLE health_profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -29,6 +31,7 @@ CREATE INDEX idx_health_profiles_user_id ON health_profiles(user_id);
 ```
 
 ### 3. supplements
+
 ```sql
 CREATE TABLE supplements (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -44,6 +47,7 @@ CREATE INDEX idx_supplements_name ON supplements(name);
 ```
 
 ### 4. user_supplements
+
 ```sql
 CREATE TABLE user_supplements (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -65,6 +69,7 @@ CREATE INDEX idx_user_supplements_dates ON user_supplements(start_date, end_date
 ```
 
 ### 5. health_alerts
+
 ```sql
 CREATE TABLE health_alerts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -85,6 +90,7 @@ CREATE INDEX idx_health_alerts_created_at ON health_alerts(created_at);
 ## Row Level Security (RLS) Policies
 
 ### health_profiles
+
 ```sql
 ALTER TABLE health_profiles ENABLE ROW LEVEL SECURITY;
 
@@ -98,6 +104,7 @@ CREATE POLICY "Users can update own health profile"
 ```
 
 ### health_alerts
+
 ```sql
 ALTER TABLE health_alerts ENABLE ROW LEVEL SECURITY;
 
@@ -111,6 +118,7 @@ CREATE POLICY "Users can update own alerts"
 ```
 
 ### user_supplements
+
 ```sql
 ALTER TABLE user_supplements ENABLE ROW LEVEL SECURITY;
 
@@ -126,14 +134,17 @@ CREATE POLICY "Users can manage own supplements"
 ## Relationships
 
 1. **health_profiles** to **auth.users**
+
    - One-to-one relationship
    - Foreign key: `user_id` references `auth.users(id)`
 
 2. **health_alerts** to **auth.users**
+
    - One-to-many relationship
    - Foreign key: `user_id` references `auth.users(id)`
 
 3. **user_supplements** to **auth.users**
+
    - One-to-many relationship
    - Foreign key: `user_id` references `auth.users(id)`
 
@@ -152,4 +163,4 @@ CREATE POLICY "Users can manage own supplements"
 6. All tables include `created_at` and `updated_at` timestamps
 7. RLS is enabled on all user-related tables
 8. Indexes are created on frequently queried columns
-9. Added appropriate CHECK constraints for data validation 
+9. Added appropriate CHECK constraints for data validation

@@ -1,4 +1,3 @@
-import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 export class LoginPage extends BasePage {
@@ -8,9 +7,9 @@ export class LoginPage extends BasePage {
   private readonly submitButton = '[data-testid="login-submit-button"]';
   private readonly form = '[data-testid="login-form"]';
 
-  constructor(page: Page) {
-    super(page);
-  }
+  // constructor(page: Page) {
+  //   super(page);
+  // }
 
   async navigate() {
     await this.page.goto("/auth/login");

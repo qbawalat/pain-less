@@ -1,4 +1,3 @@
-import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 export class CreateHealthProfilePage extends BasePage {
@@ -15,9 +14,9 @@ export class CreateHealthProfilePage extends BasePage {
   private readonly selectedMedicalConditions = '[data-testid="selected-medical-conditions"]';
   private readonly selectedFamilyConditions = '[data-testid="selected-family-conditions"]';
 
-  constructor(page: Page) {
-    super(page);
-  }
+  // constructor(page: Page) {
+  //   super(page);
+  // }
 
   async waitForForm() {
     await this.waitForSelector(this.form);

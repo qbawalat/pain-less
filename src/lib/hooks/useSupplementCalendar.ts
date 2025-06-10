@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { SupplementCalendarEvent, SupplementFilterOptions } from "@/types";
 import { toast } from "sonner";
 
@@ -7,11 +7,7 @@ export function useSupplementCalendar(filters: SupplementFilterOptions) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    fetchSupplementCalendar();
-  }, [filters]);
-
-  async function fetchSupplementCalendar() {
+  const fetchSupplementCalendar = useCallback(async () => {
     try {
       setIsLoading(true);
       const searchParams = new URLSearchParams({
@@ -51,7 +47,11 @@ export function useSupplementCalendar(filters: SupplementFilterOptions) {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [filters]);
+
+  useEffect(() => {
+    fetchSupplementCalendar();
+  }, [fetchSupplementCalendar]);
 
   return {
     supplements,

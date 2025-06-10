@@ -80,11 +80,12 @@ function getDateRangeForView(date: Date, view: ViewType) {
       start.setDate(1);
       end.setMonth(end.getMonth() + 1, 0);
       break;
-    case "week":
+    case "week": {
       const dayOfWeek = start.getDay();
       start.setDate(start.getDate() - dayOfWeek);
       end.setDate(start.getDate() + 6);
       break;
+    }
     case "day":
       // For day view, start and end are the same day
       break;

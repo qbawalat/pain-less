@@ -1,14 +1,17 @@
 # Plan implementacji widoku ustawień użytkownika
 
 ## 1. Przegląd
+
 Widok ustawień użytkownika w aplikacji pAIN-less umożliwia zarządzanie preferencjami i danymi użytkownika. Zawiera sekcje do zarządzania danymi osobowymi, preferencjami powiadomień oraz ustawieniami prywatności.
 
 ## 2. Routing widoku
+
 - Ścieżka: `/settings`
 - Middleware: Wymagana autentykacja
 - Layout: Główny layout aplikacji
 
 ## 3. Struktura komponentów
+
 ```
 SettingsView
 ├── NavigationBar
@@ -27,6 +30,7 @@ SettingsView
 ## 4. Szczegóły komponentów
 
 ### SettingsLayout
+
 - Opis: Główny układ widoku ustawień
 - Główne elementy:
   - Sidebar z nawigacją
@@ -42,6 +46,7 @@ SettingsView
   - onSectionChange: (section: SettingsSection) => void
 
 ### PersonalDataSection
+
 - Opis: Sekcja danych osobowych
 - Główne elementy:
   - Formularz danych
@@ -63,6 +68,7 @@ SettingsView
   - validationRules: ValidationRules
 
 ### NotificationSettingsSection
+
 - Opis: Sekcja preferencji powiadomień
 - Główne elementy:
   - Lista preferencji
@@ -79,6 +85,7 @@ SettingsView
   - onPreferenceChange: (pref: NotificationPreference) => void
 
 ### PrivacySettingsSection
+
 - Opis: Sekcja ustawień prywatności
 - Główne elementy:
   - Kontrolki prywatności
@@ -102,6 +109,7 @@ SettingsView
 ## 5. Typy
 
 ### PersonalData
+
 ```typescript
 interface PersonalData {
   id: string;
@@ -116,6 +124,7 @@ interface PersonalData {
 ```
 
 ### NotificationPreferences
+
 ```typescript
 interface NotificationPreferences {
   email: {
@@ -128,11 +137,12 @@ interface NotificationPreferences {
     supplementReminders: boolean;
     systemUpdates: boolean;
   };
-  frequency: 'immediate' | 'daily' | 'weekly';
+  frequency: "immediate" | "daily" | "weekly";
 }
 ```
 
 ### PrivacySettings
+
 ```typescript
 interface PrivacySettings {
   dataSharing: {
@@ -141,9 +151,9 @@ interface PrivacySettings {
     analytics: boolean;
   };
   visibility: {
-    profile: 'public' | 'private';
-    healthData: 'public' | 'private';
-    supplementData: 'public' | 'private';
+    profile: "public" | "private";
+    healthData: "public" | "private";
+    supplementData: "public" | "private";
   };
   dataRetention: {
     period: number;
@@ -153,6 +163,7 @@ interface PrivacySettings {
 ```
 
 ## 6. Zarządzanie stanem
+
 - Custom hook `useSettings` do zarządzania ustawieniami
 - Custom hook `useNotifications` do zarządzania powiadomieniami
 - Custom hook `usePrivacy` do zarządzania prywatnością
@@ -160,6 +171,7 @@ interface PrivacySettings {
 - Context `SettingsContext` do współdzielenia stanu
 
 ## 7. Integracja API
+
 - GET /api/settings - pobieranie ustawień
 - PUT /api/settings - aktualizacja ustawień
 - GET /api/settings/notifications - preferencje powiadomień
@@ -170,6 +182,7 @@ interface PrivacySettings {
 - DELETE /api/settings/account - usuwanie konta
 
 ## 8. Interakcje użytkownika
+
 - Edycja danych osobowych
 - Zarządzanie powiadomieniami
 - Konfiguracja prywatności
@@ -178,6 +191,7 @@ interface PrivacySettings {
 - Zmiana języka i strefy czasowej
 
 ## 9. Warunki i walidacja
+
 - Walidacja formularzy
 - Weryfikacja tożsamości
 - Sprawdzanie uprawnień
@@ -185,6 +199,7 @@ interface PrivacySettings {
 - Obsługa limitów API
 
 ## 10. Obsługa błędów
+
 - Wyświetlanie komunikatów w toastach
 - Fallback UI dla komponentów
 - Obsługa błędów sieciowych
@@ -192,6 +207,7 @@ interface PrivacySettings {
 - Error boundaries
 
 ## 11. Kroki implementacji
+
 1. Przygotowanie struktury komponentów
 2. Implementacja formularzy
 3. Dodanie walidacji
@@ -199,4 +215,4 @@ interface PrivacySettings {
 5. Implementacja zarządzania stanem
 6. Dodanie obsługi błędów
 7. Testy i optymalizacja
-8. Dokumentacja 
+8. Dokumentacja

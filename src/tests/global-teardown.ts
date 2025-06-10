@@ -1,7 +1,6 @@
-import type { FullConfig } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
-async function globalTeardown(_config: FullConfig) {
+async function globalTeardown() {
   console.log("Starting global teardown...");
 
   const supabaseUrl = process.env.SUPABASE_URL;

@@ -18,16 +18,16 @@ Test Scenario: New User Login Flow
 
 4. CreateHealthProfile Dialog
    ├── Verify CreateHealthProfile component renders
-   │   ├── Check for "Create Health Profile" title
-   │   ├── Verify form fields:
-   │   │   ├── Birth Date input
-   │   │   ├── Height input (cm)
-   │   │   ├── Weight input (kg)
-   │   │   ├── Medical Conditions section
-   │   │   └── Family History section
-   │   └── Confirm "Create Profile" button is present
+   │ ├── Check for "Create Health Profile" title
+   │ ├── Verify form fields:
+   │ │ ├── Birth Date input
+   │ │ ├── Height input (cm)
+   │ │ ├── Weight input (kg)
+   │ │ ├── Medical Conditions section
+   │ │ └── Family History section
+   │ └── Confirm "Create Profile" button is present
    │
    └── Verify form validation
-       ├── Check age restriction (18+ years)
-       ├── Verify required fields
-       └── Test medical conditions suggestions
+   ├── Check age restriction (18+ years)
+   ├── Verify required fields
+   └── Test medical conditions suggestions

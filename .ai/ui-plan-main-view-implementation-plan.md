@@ -1,14 +1,17 @@
 # Plan implementacji widoku głównego
 
 ## 1. Przegląd
+
 Widok główny aplikacji pAIN-less prezentuje kompleksowy profil zdrowotny użytkownika w stylu Pip-Boy z Fallout. Zawiera podstawowe dane zdrowotne, uproszczony kalendarz tygodniowy, listę aktualnych suplementów oraz system alertów zdrowotnych. Widok jest zoptymalizowany pod kątem urządzeń mobilnych i zapewnia wysoką dostępność.
 
 ## 2. Routing widoku
+
 - Ścieżka: `/`
 - Middleware: Wymagana autentykacja
 - Layout: Główny layout aplikacji
 
 ## 3. Struktura komponentów
+
 ```
 MainView
 ├── NavigationBar
@@ -27,6 +30,7 @@ MainView
 ## 4. Szczegóły komponentów
 
 ### NavigationBar
+
 - Opis: Główna nawigacja aplikacji z systemem powiadomień
 - Główne elementy:
   - Logo aplikacji
@@ -43,6 +47,7 @@ MainView
   - notifications: Notification[]
 
 ### HealthStats
+
 - Opis: Panel statystyk zdrowotnych w stylu Pip-Boy
 - Główne elementy:
   - Podstawowe dane (waga, wzrost, wiek)
@@ -63,6 +68,7 @@ MainView
   - onUpdate: (data: HealthProfileUpdate) => void
 
 ### CalendarWidget
+
 - Opis: Uproszczony widok kalendarza tygodniowego
 - Główne elementy:
   - Widok tygodniowy
@@ -79,6 +85,7 @@ MainView
   - onEventClick: (event: CalendarEvent) => void
 
 ### SupplementList
+
 - Opis: Lista aktualnych suplementów użytkownika
 - Główne elementy:
   - Lista suplementów
@@ -102,6 +109,7 @@ MainView
   - onDelete: (id: string) => void
 
 ### AlertSystem
+
 - Opis: System alertów zdrowotnych
 - Główne elementy:
   - Lista alertów
@@ -120,6 +128,7 @@ MainView
 ## 5. Typy
 
 ### HealthProfileViewModel
+
 ```typescript
 interface HealthProfileViewModel {
   id: string;
@@ -134,19 +143,21 @@ interface HealthProfileViewModel {
 ```
 
 ### CalendarEventViewModel
+
 ```typescript
 interface CalendarEventViewModel {
   id: string;
-  type: 'supplement' | 'alert' | 'medical';
+  type: "supplement" | "alert" | "medical";
   title: string;
   startDate: Date;
   endDate: Date;
   description: string;
-  status: 'active' | 'completed' | 'cancelled';
+  status: "active" | "completed" | "cancelled";
 }
 ```
 
 ## 6. Zarządzanie stanem
+
 - Custom hook `useHealthProfile` do zarządzania profilem zdrowotnym
 - Custom hook `useSupplements` do zarządzania suplementami
 - Custom hook `useAlerts` do zarządzania alertami
@@ -154,6 +165,7 @@ interface CalendarEventViewModel {
 - Local state dla komponentów formularzy
 
 ## 7. Integracja API
+
 - GET /api/health-profiles - pobieranie profilu
 - PUT /api/health-profiles - aktualizacja profilu
 - GET /api/user-supplements - lista suplementów
@@ -162,6 +174,7 @@ interface CalendarEventViewModel {
 - PUT /api/health-alerts/:id/acknowledge - potwierdzanie alertu
 
 ## 8. Interakcje użytkownika
+
 - Aktualizacja danych profilu
 - Zarządzanie suplementami
 - Nawigacja w kalendarzu
@@ -169,6 +182,7 @@ interface CalendarEventViewModel {
 - Filtrowanie i wyszukiwanie
 
 ## 9. Warunki i walidacja
+
 - Walidacja formularzy przed wysłaniem
 - Sprawdzanie uprawnień użytkownika
 - Weryfikacja dat i wartości numerycznych
@@ -176,6 +190,7 @@ interface CalendarEventViewModel {
 - Walidacja stanu komponentów
 
 ## 10. Obsługa błędów
+
 - Wyświetlanie komunikatów błędów w toastach
 - Fallback UI dla komponentów
 - Retry mechanizm dla API calls
@@ -183,10 +198,11 @@ interface CalendarEventViewModel {
 - Error boundaries dla komponentów
 
 ## 11. Kroki implementacji
+
 1. Przygotowanie struktury projektu i komponentów
 2. Implementacja podstawowych komponentów UI
 3. Integracja z API i zarządzanie stanem
 4. Implementacja logiki biznesowej
 5. Dodanie walidacji i obsługi błędów
 6. Testy i optymalizacja
-7. Dokumentacja i code review 
+7. Dokumentacja i code review

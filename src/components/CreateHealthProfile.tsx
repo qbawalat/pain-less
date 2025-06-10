@@ -50,7 +50,7 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
     try {
       const profile = await createProfile(formData);
       onProfileCreated(profile);
-    } catch (error) {
+    } catch {
       // Error is handled by the hook
     }
   };

@@ -44,7 +44,7 @@ export function SupplementCombobox({
         try {
           const newSupplement = await onCreateSupplement(search.trim());
           onValueChange(newSupplement.id);
-        } catch (error) {
+        } catch {
           // Error is handled by the parent component
           return;
         }
@@ -96,7 +96,7 @@ export function SupplementCombobox({
               <CommandGroup heading="Create New">
                 <CommandItem value={search} onSelect={handleSelect}>
                   <Check className="mr-2 h-4 w-4 opacity-0" />
-                  Create "{search}"
+                  Create &quot;{search}&quot;
                 </CommandItem>
               </CommandGroup>
             )}

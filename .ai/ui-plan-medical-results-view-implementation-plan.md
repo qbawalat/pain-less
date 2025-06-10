@@ -1,14 +1,17 @@
 # Plan implementacji widoku wyników badań
 
 ## 1. Przegląd
+
 Widok wyników badań w aplikacji pAIN-less umożliwia zarządzanie i przegląd wyników badań medycznych. Zawiera historię badań, wykresy trendów oraz notatki medyczne. Widok zapewnia zaawansowane funkcje wizualizacji i analizy danych zdrowotnych.
 
 ## 2. Routing widoku
+
 - Ścieżka: `/medical-results`
 - Middleware: Wymagana autentykacja
 - Layout: Główny layout aplikacji
 
 ## 3. Struktura komponentów
+
 ```
 MedicalResultsView
 ├── NavigationBar
@@ -29,6 +32,7 @@ MedicalResultsView
 ## 4. Szczegóły komponentów
 
 ### ResultsLayout
+
 - Opis: Główny układ widoku wyników
 - Główne elementy:
   - Sidebar z filtrami
@@ -46,6 +50,7 @@ MedicalResultsView
   - onFilterChange: (filters: FilterOptions) => void
 
 ### ResultsTable
+
 - Opis: Tabela wyników badań
 - Główne elementy:
   - Nagłówki kolumn
@@ -67,6 +72,7 @@ MedicalResultsView
   - onResultSelect: (result: MedicalResult) => void
 
 ### ResultsChart
+
 - Opis: Wykres trendów wyników
 - Główne elementy:
   - Wykres liniowy
@@ -85,6 +91,7 @@ MedicalResultsView
   - onRangeChange: (range: TimeRange) => void
 
 ### ResultsForm
+
 - Opis: Formularz dodawania wyników
 - Główne elementy:
   - Pola formularza
@@ -106,6 +113,7 @@ MedicalResultsView
   - validationRules: ValidationRules
 
 ### NotesSection
+
 - Opis: Sekcja notatek medycznych
 - Główne elementy:
   - Edytor notatek
@@ -126,6 +134,7 @@ MedicalResultsView
 ## 5. Typy
 
 ### MedicalResult
+
 ```typescript
 interface MedicalResult {
   id: string;
@@ -137,13 +146,14 @@ interface MedicalResult {
     min: number;
     max: number;
   };
-  status: 'normal' | 'abnormal' | 'critical';
+  status: "normal" | "abnormal" | "critical";
   notes?: string;
   attachments?: string[];
 }
 ```
 
 ### ChartData
+
 ```typescript
 interface ChartData {
   results: {
@@ -158,13 +168,14 @@ interface ChartData {
   }[];
   trends: {
     type: string;
-    direction: 'up' | 'down' | 'stable';
+    direction: "up" | "down" | "stable";
     significance: number;
   }[];
 }
 ```
 
 ### MedicalNote
+
 ```typescript
 interface MedicalNote {
   id: string;
@@ -178,6 +189,7 @@ interface MedicalNote {
 ```
 
 ## 6. Zarządzanie stanem
+
 - Custom hook `useMedicalResults` do zarządzania wynikami
 - Custom hook `useResultsChart` do zarządzania wykresami
 - Custom hook `useMedicalNotes` do zarządzania notatkami
@@ -185,6 +197,7 @@ interface MedicalNote {
 - Context `ResultsContext` do współdzielenia stanu
 
 ## 7. Integracja API
+
 - GET /api/medical-results - pobieranie wyników
 - POST /api/medical-results - dodawanie wyniku
 - PUT /api/medical-results/:id - aktualizacja wyniku
@@ -194,6 +207,7 @@ interface MedicalNote {
 - POST /api/medical-results/notes - dodawanie notatki
 
 ## 8. Interakcje użytkownika
+
 - Przeglądanie wyników
 - Dodawanie nowych wyników
 - Edycja istniejących wyników
@@ -202,6 +216,7 @@ interface MedicalNote {
 - Eksport danych
 
 ## 9. Warunki i walidacja
+
 - Walidacja formularzy
 - Sprawdzanie zakresów referencyjnych
 - Weryfikacja formatu danych
@@ -209,6 +224,7 @@ interface MedicalNote {
 - Obsługa limitów API
 
 ## 10. Obsługa błędów
+
 - Wyświetlanie komunikatów w toastach
 - Fallback UI dla komponentów
 - Obsługa błędów sieciowych
@@ -216,6 +232,7 @@ interface MedicalNote {
 - Error boundaries
 
 ## 11. Kroki implementacji
+
 1. Przygotowanie struktury komponentów
 2. Implementacja tabeli wyników
 3. Dodanie wykresów trendów
@@ -224,4 +241,4 @@ interface MedicalNote {
 6. Dodanie systemu notatek
 7. Implementacja walidacji
 8. Testy i optymalizacja
-9. Dokumentacja 
+9. Dokumentacja

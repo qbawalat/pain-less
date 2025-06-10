@@ -1,4 +1,3 @@
-import { Page } from "@playwright/test";
 import { BasePage } from "./BasePage";
 
 export class MainDashboardPage extends BasePage {
@@ -7,9 +6,9 @@ export class MainDashboardPage extends BasePage {
   private readonly createProfileContainer = '[data-testid="create-profile-container"]';
   private readonly globalErrorContainer = '[data-testid="global-error-container"]';
 
-  constructor(page: Page) {
-    super(page);
-  }
+  // constructor(page: Page) {
+  //   super(page);
+  // }
 
   async waitForDashboard() {
     await this.waitForSelector(this.mainDashboard);
