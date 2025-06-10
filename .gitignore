@@ -22,6 +22,13 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# test reports
+playwright-report/
+test-results/
+coverage/
+
+# project specific
 druciaki/alerts.png
 druciaki/calendar.png
 druciaki/health profile.png

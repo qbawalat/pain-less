@@ -3,7 +3,7 @@ import AuthLayout from "@/layouts/AuthLayout.astro";
 import { AuthCard } from "@/components/auth/AuthCard";
 
 // Get token from URL
-const token = Astro.url.searchParams.get('token');
+const token = Astro.url.searchParams.get("token");
 
 // Handle verification if token exists
 let verificationStatus = null;
@@ -11,12 +11,12 @@ if (token) {
   try {
     const { error } = await Astro.locals.supabase.auth.verifyOtp({
       token_hash: token,
-      type: 'email',
+      type: "email",
     });
 
-    verificationStatus = error ? 'error' : 'success';
+    verificationStatus = error ? "error" : "success";
   } catch (error) {
-    verificationStatus = 'error';
+    verificationStatus = "error";
   }
 }
 
@@ -32,12 +32,10 @@ const content = {
   error: {
     title: "Verification failed",
     description: "The verification link is invalid or has expired. Please try signing up again.",
-  }
+  },
 };
 
-const { title, description } = verificationStatus 
-  ? content[verificationStatus] 
-  : content.initial;
+const { title, description } = verificationStatus ? content[verificationStatus] : content.initial;
 ---
 
 <AuthLayout>
@@ -46,57 +44,38 @@ const { title, description } = verificationStatus
     title={title}
     description={description}
     footer={{
-      type: 'link',
-      text: verificationStatus === 'success' ? "Sign in to your account" : "Back to sign up",
-      href: verificationStatus === 'success' ? "/auth/login" : "/auth/register"
+      type: "link",
+      text: verificationStatus === "success" ? "Sign in to your account" : "Back to sign up",
+      href: verificationStatus === "success" ? "/auth/login" : "/auth/register",
     }}
   >
     <div class="flex justify-center">
-      {verificationStatus === 'success' && (
-        <svg
-          class="h-16 w-16 text-green-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5 13l4 4L19 7"
-          />
-        </svg>
-      )}
-      {verificationStatus === 'error' && (
-        <svg
-          class="h-16 w-16 text-red-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      )}
-      {!verificationStatus && (
-        <svg
-          class="h-16 w-16 text-blue-500 animate-pulse"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
-        </svg>
-      )}
+      {
+        verificationStatus === "success" && (
+          <svg class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        )
+      }
+      {
+        verificationStatus === "error" && (
+          <svg class="h-16 w-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        )
+      }
+      {
+        !verificationStatus && (
+          <svg class="h-16 w-16 text-blue-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+        )
+      }
     </div>
   </AuthCard>
-</AuthLayout> 
+</AuthLayout>

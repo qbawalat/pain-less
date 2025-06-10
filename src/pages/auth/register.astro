@@ -1,13 +1,13 @@
 ---
-import AuthLayout from "@/layouts/AuthLayout.astro"
-import { AuthCard } from "@/components/auth/AuthCard"
-import { RegisterForm } from "@/components/auth/RegisterForm"
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { AuthCard } from "@/components/auth/AuthCard";
+import { RegisterForm } from "@/components/auth/RegisterForm";
 
 const footer = {
   text: "Already have an account?",
   linkText: "Sign in",
-  linkHref: "/auth/login"
-}
+  linkHref: "/auth/login",
+};
 ---
 
 <AuthLayout>
@@ -16,10 +16,10 @@ const footer = {
     title="Create an account"
     description="Enter your email below to create your account"
     footer={{
-      type: 'custom',
-      content: footer
+      type: "custom",
+      content: footer,
     }}
   >
     <RegisterForm client:load />
   </AuthCard>
-</AuthLayout> 
+</AuthLayout>

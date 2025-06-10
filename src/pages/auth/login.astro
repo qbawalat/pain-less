@@ -1,15 +1,15 @@
 ---
-import AuthLayout from "@/layouts/AuthLayout.astro"
-import { AuthCard } from "@/components/auth/AuthCard"
-import { LoginForm } from "@/components/auth/LoginForm"
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import { AuthCard } from "@/components/auth/AuthCard";
+import { LoginForm } from "@/components/auth/LoginForm";
 
 const footer = {
   text: "Don't have an account?",
   linkText: "Sign up",
   linkHref: "/auth/register",
   forgotPasswordText: "Forgot your password?",
-  forgotPasswordHref: "/auth/forgot-password"
-}
+  forgotPasswordHref: "/auth/forgot-password",
+};
 ---
 
 <AuthLayout>
@@ -18,10 +18,10 @@ const footer = {
     title="Welcome back"
     description="Enter your email to sign in to your account"
     footer={{
-      type: 'custom',
-      content: footer
+      type: "custom",
+      content: footer,
     }}
   >
     <LoginForm client:load />
   </AuthCard>
-</AuthLayout> 
+</AuthLayout>
