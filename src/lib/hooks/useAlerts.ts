@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { HealthAlertResponse, PaginationResponse } from "@/types";
+import type { HealthAlertResponse } from "@/types";
 import { toast } from "sonner";
 
 export function useAlerts() {
@@ -13,7 +13,7 @@ export function useAlerts() {
 
   async function fetchAlerts() {
     try {
-      const response = await fetch("/api/health-alerts");
+      const response = await fetch("/api/health-alerts?status=pending");
       if (!response.ok) {
         throw new Error("Failed to fetch alerts");
       }
@@ -53,10 +53,9 @@ export function useAlerts() {
         throw new Error("Failed to acknowledge alert");
       }
 
-      const updatedAlert = await response.json();
-      setAlerts((prev) => prev.map((alert) => (alert.id === id ? updatedAlert : alert)));
+      // Remove the acknowledged alert from the list
+      setAlerts((prev) => prev.filter((alert) => alert.id !== id));
       toast.success("Alert acknowledged");
-      return updatedAlert;
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Unknown error");
       toast.error("Failed to acknowledge alert");

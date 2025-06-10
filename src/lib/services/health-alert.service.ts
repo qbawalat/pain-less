@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../../db/database.types";
-import type { HealthAlertResponse, PaginationResponse, AlertStatus } from "../../types";
+import type { HealthAlertResponse, PaginationResponse, AlertStatus, AlertType } from "../../types";
 
 export class HealthAlertService {
   constructor(
@@ -57,6 +57,29 @@ export class HealthAlertService {
     if (error) {
       throw error;
     }
+  }
+
+  async bulkCreateAlerts(
+    alerts: {
+      alert_type: AlertType;
+      message: string;
+      status?: AlertStatus;
+    }[]
+  ): Promise<HealthAlertResponse[]> {
+    const alertsToInsert = alerts.map((alert) => ({
+      user_id: this.userId,
+      alert_type: alert.alert_type,
+      message: alert.message,
+      status: alert.status || "pending",
+    }));
+
+    const { data, error } = await this.supabase.from("health_alerts").insert(alertsToInsert).select();
+
+    if (error) {
+      throw error;
+    }
+
+    return data.map(this.mapToResponse);
   }
 
   private mapToResponse(alert: Database["public"]["Tables"]["health_alerts"]["Row"]): HealthAlertResponse {

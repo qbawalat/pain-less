@@ -5,7 +5,7 @@ import { requireAuth } from "../../../../middleware/auth";
 
 export const prerender = false;
 
-export async function POST(context: APIContext) {
+export async function PUT(context: APIContext) {
   try {
     const user = requireAuth(context);
     const service = new HealthAlertService(context.locals.supabase, user.id);
