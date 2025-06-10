@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const registerSchema = z
   .object({
@@ -32,10 +33,35 @@ export function RegisterForm() {
   });
 
   async function onSubmit(data: RegisterFormValues) {
-    setIsLoading(true);
-    // Form submission will be handled later
-    console.log(data);
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to create account");
+      }
+
+      // Show success message
+      toast.success(result.message || "Account created successfully! Please check your email.");
+
+      // Redirect to login page after a short delay
+      setTimeout(() => {
+        window.location.href = "/auth/login";
+      }, 2000);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "An unexpected error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

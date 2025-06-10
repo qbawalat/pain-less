@@ -1,4 +1,12 @@
 import type { Database } from "./db/database.types";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+
+declare module "astro" {
+  interface Locals {
+    supabase: SupabaseClient;
+    user: User | null;
+  }
+}
 
 // Health Profile DTOs
 export type HealthProfileResponse = Pick<
