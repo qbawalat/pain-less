@@ -1,0 +1,24 @@
+---
+import { Toaster } from "@/components/ui/sonner";
+import NavigationBar from "@/components/NavigationBar";
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pAIn-less - Your Health Companion</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen bg-background font-sans antialiased">
+    <div class="relative flex min-h-screen flex-col">
+      <NavigationBar client:load />
+      <main class="flex-1">
+        <slot />
+      </main>
+    </div>
+    <Toaster client:load />
+  </body>
+</html>

@@ -1,6 +1,7 @@
 # Podsumowanie rozmów dotyczących PRD - pAIN-less
 
 ## Decyzje
+
 1. System będzie oparty na Supabase do zarządzania danymi i autentykacji
 2. Implementacja będzie prosta, zgodnie z podejściem MVP
 3. Miesięczne przypomnienia emailowe o aktualizacji profilu
@@ -27,6 +28,7 @@
 24. System nie będzie przechowywał historii zmian (uproszczenie MVP)
 
 ## Dopasowane rekomendacje
+
 1. Implementacja prostego szablonu emaila z kluczowymi informacjami
 2. Wprowadzenie uproszczonego systemu poziomów użytkownika
 3. Stworzenie podstawowej bazy wiedzy o suplementach
@@ -37,6 +39,7 @@
 ## Podsumowanie planowania PRD
 
 ### Główne wymagania funkcjonalne
+
 - Profil zdrowotny z miesięcznymi przypomnieniami
 - System punktowy (3 poziomy: 0-50, 51-200, 201+)
 - Kalendarz zdrowotny bez historii zmian
@@ -47,6 +50,7 @@
 - Tylko wersja webowa
 
 ### Kluczowe historie użytkownika
+
 - Regularna aktualizacja profilu zdrowotnego
 - Przeglądanie i zarządzanie kalendarzem
 - Otrzymywanie i reagowanie na alerty
@@ -54,18 +58,21 @@
 - Potwierdzanie ostrzeżeń o konfliktach suplementów
 
 ### Kryteria sukcesu
+
 - 90% użytkowników regularnie aktualizuje profil
 - 80% akceptacji planów suplementacji
 - 95% dokładność oznaczeń w kalendarzu
 - Regularne sprawdzanie alertów (raz w tygodniu)
 
 ### Sposoby mierzenia
+
 - System punktowy za aktualizacje
 - Procent akceptacji planów
 - Dokładność oznaczeń w kalendarzu
 - Częstotliwość sprawdzania alertów
 
 ## Nierozwiązane kwestie
+
 1. Konkretne metryki dla oceny jakości rekomendacji AI
 2. Szczegółowe wymagania dotyczące formatu i zawartości emaili
 3. Dokładne progi punktowe dla poszczególnych poziomów użytkownika

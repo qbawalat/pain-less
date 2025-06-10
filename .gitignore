@@ -22,3 +22,22 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# test reports
+playwright-report/
+test-results/
+coverage/
+
+# project specific
+druciaki/alerts.png
+druciaki/calendar.png
+druciaki/health profile.png
+druciaki/homescreen.png
+druciaki/panel logowania.png
+druciaki/supplements.png
+supabase/.temp/gotrue-version
+supabase/.temp/pooler-url
+supabase/.temp/postgres-version
+supabase/.temp/project-ref
+supabase/.temp/rest-version
+.env.test

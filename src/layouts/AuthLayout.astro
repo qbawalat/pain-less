@@ -1,0 +1,12 @@
+---
+import Layout from "./Layout.astro";
+import { ViewTransitions } from "astro:transitions";
+import "../styles/global.css";
+---
+
+<Layout title="Authentication">
+  <ViewTransitions />
+  <main class="flex min-h-screen w-full items-center justify-center bg-background px-4">
+    <slot />
+  </main>
+</Layout>
