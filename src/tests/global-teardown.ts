@@ -18,7 +18,8 @@ async function globalTeardown() {
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   // List of tables to clean up (excluding auth.users)
-  const tablesToClean = ["health_alerts", "health_profiles", "supplements", "user_supplements"];
+  const tablesToClean = ["health_profiles"];
+  // const tablesToClean = ["health_alerts", "health_profiles", "supplements", "user_supplements"];
 
   for (const table of tablesToClean) {
     try {
