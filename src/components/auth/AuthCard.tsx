@@ -27,13 +27,13 @@ export function AuthCard({ title, description, children, footer }: AuthCardProps
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent className="grid gap-4">{children}</CardContent>
-      {footer && (
+      {footer?.content && (
         <div className="px-6 py-4 text-sm text-center text-muted-foreground">
           <span>{footer.content.text}</span>{" "}
           <a href={footer.content.linkHref} className="text-primary hover:underline">
             {footer.content.linkText}
           </a>
-          {footer.content.forgotPasswordText && (
+          {footer.content.forgotPasswordText && footer.content.forgotPasswordHref && (
             <div className="mt-2">
               <a href={footer.content.forgotPasswordHref} className="text-primary hover:underline">
                 {footer.content.forgotPasswordText}
