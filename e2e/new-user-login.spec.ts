@@ -3,9 +3,18 @@ import { LoginPage } from "@/tests/pages/LoginPage";
 import { MainDashboardPage } from "@/tests/pages/MainDashboardPage";
 import { CreateHealthProfilePage } from "@/tests/pages/CreateHealthProfilePage";
 
+// Load test environment variables
+// dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+
 // Test credentials
 const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL;
 const TEST_USER_PASSWORD = process.env.TEST_USER_PASSWORD;
+
+if (!TEST_USER_EMAIL || !TEST_USER_PASSWORD) {
+  throw new Error(
+    "Test credentials not found in .env.test file. Please ensure TEST_USER_EMAIL and TEST_USER_PASSWORD are set."
+  );
+}
 
 test.describe("New User Login Flow", () => {
   test("should create health profile after successful login", async ({ page }) => {

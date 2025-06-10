@@ -3,9 +3,9 @@ import { BasePage } from "./BasePage";
 
 export class MainDashboardPage extends BasePage {
   // Selectors
-  private readonly mainDashboard = '[data-test-id="main-dashboard"]';
-  private readonly createProfileContainer = '[data-test-id="create-profile-container"]';
-  private readonly globalErrorContainer = '[data-test-id="global-error-container"]';
+  private readonly mainDashboard = '[data-testid="main-dashboard"]';
+  private readonly createProfileContainer = '[data-testid="create-profile-container"]';
+  private readonly globalErrorContainer = '[data-testid="global-error-container"]';
 
   constructor(page: Page) {
     super(page);

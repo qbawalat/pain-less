@@ -79,17 +79,17 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
   const inputClasses = "border-2 border-primary/20 focus:border-primary/50 transition-colors";
 
   return (
-    <Card className="w-full max-w-2xl mx-auto" data-test-id="create-health-profile-card">
+    <Card className="w-full max-w-2xl mx-auto" data-testid="create-health-profile-card">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Create Health Profile</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4" data-test-id="health-profile-form">
+        <form onSubmit={handleSubmit} className="space-y-4" data-testid="health-profile-form">
           <div className="space-y-2">
             <Label htmlFor="birth_date">Birth Date</Label>
             <div className="space-y-1">
               <Input
-                data-test-id="birth-date-input"
+                data-testid="birth-date-input"
                 id="birth_date"
                 type="date"
                 value={formData.birth_date}
@@ -104,7 +104,7 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
           <div className="space-y-2">
             <Label htmlFor="height">Height (cm)</Label>
             <Input
-              data-test-id="height-input"
+              data-testid="height-input"
               id="height"
               type="number"
               min="0"
@@ -117,7 +117,7 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
           <div className="space-y-2">
             <Label htmlFor="weight">Weight (kg)</Label>
             <Input
-              data-test-id="weight-input"
+              data-testid="weight-input"
               id="weight"
               type="number"
               min="0"
@@ -133,14 +133,14 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
             <div className="space-y-4">
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground">Common programmer health conditions:</p>
-                <div className="flex flex-wrap gap-2" data-test-id="suggested-conditions">
+                <div className="flex flex-wrap gap-2" data-testid="suggested-conditions">
                   {SUGGESTED_CONDITIONS.map((condition) => (
                     <Button
                       key={condition}
                       type="button"
                       variant="outline"
                       size="sm"
-                      data-test-id={`suggested-condition-${condition.toLowerCase().replace(/\s+/g, "-")}`}
+                      data-testid={`suggested-condition-${condition.toLowerCase().replace(/\s+/g, "-")}`}
                       className={`group ${formData.medical_conditions.includes(condition) ? "bg-primary/10" : ""}`}
                       onClick={() => addCondition("medical_conditions", condition)}
                       disabled={formData.medical_conditions.includes(condition)}
@@ -157,7 +157,7 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
               </div>
               <div className="flex gap-2">
                 <Input
-                  data-test-id="custom-medical-condition-input"
+                  data-testid="custom-medical-condition-input"
                   value={newMedicalCondition}
                   onChange={(e) => setNewMedicalCondition(e.target.value)}
                   placeholder="Add a custom medical condition"
@@ -170,19 +170,19 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
                   }}
                 />
                 <Button
-                  data-test-id="add-medical-condition-button"
+                  data-testid="add-medical-condition-button"
                   type="button"
                   onClick={() => addCondition("medical_conditions", newMedicalCondition)}
                 >
                   Add
                 </Button>
               </div>
-              <div className="space-y-2" data-test-id="selected-medical-conditions">
+              <div className="space-y-2" data-testid="selected-medical-conditions">
                 {formData.medical_conditions?.map((condition, index) => (
                   <div key={index} className="flex items-center gap-2 bg-primary/5 p-2 rounded-md">
                     <span className="flex-1">{condition}</span>
                     <Button
-                      data-test-id={`remove-medical-condition-${index}`}
+                      data-testid={`remove-medical-condition-${index}`}
                       type="button"
                       variant="ghost"
                       size="icon"
@@ -200,7 +200,7 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
             <div className="space-y-2">
               <div className="flex gap-2">
                 <Input
-                  data-test-id="family-condition-input"
+                  data-testid="family-condition-input"
                   value={newFamilyCondition}
                   onChange={(e) => setNewFamilyCondition(e.target.value)}
                   placeholder="Add a family condition"
@@ -213,19 +213,19 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
                   }}
                 />
                 <Button
-                  data-test-id="add-family-condition-button"
+                  data-testid="add-family-condition-button"
                   type="button"
                   onClick={() => addCondition("family_conditions", newFamilyCondition)}
                 >
                   Add
                 </Button>
               </div>
-              <div className="space-y-2" data-test-id="selected-family-conditions">
+              <div className="space-y-2" data-testid="selected-family-conditions">
                 {formData.family_conditions?.map((condition, index) => (
                   <div key={index} className="flex items-center gap-2 bg-primary/5 p-2 rounded-md">
                     <span className="flex-1">{condition}</span>
                     <Button
-                      data-test-id={`remove-family-condition-${index}`}
+                      data-testid={`remove-family-condition-${index}`}
                       type="button"
                       variant="ghost"
                       size="icon"
@@ -238,7 +238,7 @@ export default function CreateHealthProfile({ onProfileCreated }: CreateHealthPr
               </div>
             </div>
           </div>
-          <Button data-test-id="create-profile-submit-button" type="submit" className="w-full" disabled={isLoading}>
+          <Button data-testid="create-profile-submit-button" type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Creating..." : "Create Profile"}
           </Button>
         </form>

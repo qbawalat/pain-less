@@ -3,17 +3,17 @@ import { BasePage } from "./BasePage";
 
 export class CreateHealthProfilePage extends BasePage {
   // Selectors
-  private readonly form = '[data-test-id="health-profile-form"]';
-  private readonly birthDateInput = '[data-test-id="birth-date-input"]';
-  private readonly heightInput = '[data-test-id="height-input"]';
-  private readonly weightInput = '[data-test-id="weight-input"]';
-  private readonly customMedicalConditionInput = '[data-test-id="custom-medical-condition-input"]';
-  private readonly addMedicalConditionButton = '[data-test-id="add-medical-condition-button"]';
-  private readonly familyConditionInput = '[data-test-id="family-condition-input"]';
-  private readonly addFamilyConditionButton = '[data-test-id="add-family-condition-button"]';
-  private readonly submitButton = '[data-test-id="create-profile-submit-button"]';
-  private readonly selectedMedicalConditions = '[data-test-id="selected-medical-conditions"]';
-  private readonly selectedFamilyConditions = '[data-test-id="selected-family-conditions"]';
+  private readonly form = '[data-testid="health-profile-form"]';
+  private readonly birthDateInput = '[data-testid="birth-date-input"]';
+  private readonly heightInput = '[data-testid="height-input"]';
+  private readonly weightInput = '[data-testid="weight-input"]';
+  private readonly customMedicalConditionInput = '[data-testid="custom-medical-condition-input"]';
+  private readonly addMedicalConditionButton = '[data-testid="add-medical-condition-button"]';
+  private readonly familyConditionInput = '[data-testid="family-condition-input"]';
+  private readonly addFamilyConditionButton = '[data-testid="add-family-condition-button"]';
+  private readonly submitButton = '[data-testid="create-profile-submit-button"]';
+  private readonly selectedMedicalConditions = '[data-testid="selected-medical-conditions"]';
+  private readonly selectedFamilyConditions = '[data-testid="selected-family-conditions"]';
 
   constructor(page: Page) {
     super(page);
@@ -40,17 +40,17 @@ export class CreateHealthProfilePage extends BasePage {
   }
 
   async addSuggestedCondition(conditionName: string) {
-    const selector = `[data-test-id="suggested-condition-${conditionName.toLowerCase().replace(/\s+/g, "-")}"]`;
+    const selector = `[data-testid="suggested-condition-${conditionName.toLowerCase().replace(/\s+/g, "-")}"]`;
     await this.click(selector);
   }
 
   async removeMedicalCondition(index: number) {
-    const selector = `[data-test-id="remove-medical-condition-${index}"]`;
+    const selector = `[data-testid="remove-medical-condition-${index}"]`;
     await this.click(selector);
   }
 
   async removeFamilyCondition(index: number) {
-    const selector = `[data-test-id="remove-family-condition-${index}"]`;
+    const selector = `[data-testid="remove-family-condition-${index}"]`;
     await this.click(selector);
   }
 

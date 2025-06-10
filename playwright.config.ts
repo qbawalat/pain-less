@@ -3,13 +3,29 @@ import dotenv from "dotenv";
 import path from "path";
 
 // Load test environment variables
+// const envFile = path.resolve(process.cwd(), ".env.test");
+// const result = dotenv.config({ path: envFile });
+
+// if (result.error) {
+//   throw new Error(`Error loading .env.test file: ${result.error.message}`);
+// }
+
+// // Validate required test environment variables
+// const requiredEnvVars = ["TEST_USER_EMAIL", "TEST_USER_PASSWORD", "SUPABASE_URL", "SUPABASE_KEY", "OPENROUTER_API_KEY"];
+
+// const missingEnvVars = requiredEnvVars.filter((varName) => !process.env[varName]);
+// if (missingEnvVars.length > 0) {
+//   throw new Error(`Missing required environment variables in .env.test: ${missingEnvVars.join(", ")}`);
+// }
 dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
-// Log environment variables
+// Log environment for debugging
 console.log("Environment variables loaded:");
-console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
-console.log("SUPABASE_KEY:", process.env.SUPABASE_KEY);
-console.log("OPENROUTER_API_KEY:", process.env.OPENROUTER_API_KEY);
+console.log("TEST_USER_EMAIL:", process.env.TEST_USER_EMAIL ? "✓ Set" : "✗ Missing");
+console.log("TEST_USER_PASSWORD:", process.env.TEST_USER_PASSWORD ? "✓ Set" : "✗ Missing");
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL ? "✓ Set" : "✗ Missing");
+console.log("SUPABASE_KEY:", process.env.SUPABASE_KEY ? "✓ Set" : "✗ Missing");
+console.log("OPENROUTER_API_KEY:", process.env.OPENROUTER_API_KEY ? "✓ Set" : "✗ Missing");
 console.log("NODE_ENV:", process.env.NODE_ENV);
 
 /**

@@ -3,10 +3,10 @@ import { BasePage } from "./BasePage";
 
 export class LoginPage extends BasePage {
   // Selectors
-  private readonly emailInput = '[data-test-id="login-email-input"]';
-  private readonly passwordInput = '[data-test-id="login-password-input"]';
-  private readonly submitButton = '[data-test-id="login-submit-button"]';
-  private readonly form = '[data-test-id="login-form"]';
+  private readonly emailInput = '[data-testid="login-email-input"]';
+  private readonly passwordInput = '[data-testid="login-password-input"]';
+  private readonly submitButton = '[data-testid="login-submit-button"]';
+  private readonly form = '[data-testid="login-form"]';
 
   constructor(page: Page) {
     super(page);

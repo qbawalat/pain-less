@@ -41,7 +41,7 @@ export default function MainView() {
   // Show global error if all requests fail
   if (profileError && supplementsError && alertsError) {
     return (
-      <div className="container mx-auto px-4 py-8" data-test-id="global-error-container">
+      <div className="container mx-auto px-4 py-8" data-testid="global-error-container">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center space-y-4">
             <h2 className="text-2xl font-bold text-destructive">Unable to load data</h2>
@@ -55,7 +55,7 @@ export default function MainView() {
   // Show create profile form if no profile exists
   if (!isProfileLoading && !profile) {
     return (
-      <div className="container mx-auto px-4 py-8" data-test-id="create-profile-container">
+      <div className="container mx-auto px-4 py-8" data-testid="create-profile-container">
         <div className="flex flex-col items-center justify-center min-h-[400px]">
           <div className="w-full max-w-2xl">
             <ErrorBoundary>
@@ -72,7 +72,7 @@ export default function MainView() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8" data-test-id="main-dashboard">
+    <div className="container mx-auto px-4 py-8" data-testid="main-dashboard">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <ErrorBoundary>
           {isProfileLoading ? <HealthStatsSkeleton /> : <HealthStats profile={profile} onUpdate={updateProfile} />}
