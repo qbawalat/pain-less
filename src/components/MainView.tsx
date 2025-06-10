@@ -30,7 +30,13 @@ export default function MainView() {
     deleteSupplement,
   } = useSupplements();
 
-  const { alerts, isLoading: isAlertsLoading, error: alertsError, acknowledgeAlert } = useAlerts();
+  const {
+    alerts,
+    isLoading: isAlertsLoading,
+    error: alertsError,
+    acknowledgeAlert,
+    refetch: refetchAlerts,
+  } = useAlerts();
 
   // Show global error if all requests fail
   if (profileError && supplementsError && alertsError) {
@@ -84,7 +90,10 @@ export default function MainView() {
       {/* AI Health Analysis CTA */}
       <div className="mt-12 mb-8">
         <ErrorBoundary>
-          <AIHealthAnalysisButton className="bg-card border border-border rounded-lg shadow-sm" />
+          <AIHealthAnalysisButton
+            className="bg-card border border-border rounded-lg shadow-sm"
+            onAnalysisComplete={refetchAlerts}
+          />
         </ErrorBoundary>
       </div>
 

@@ -26,7 +26,7 @@
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   --border: #23272a; /* dark border */
-  --input: #23272a;
+  --input: #15803d; /* darker green for input borders */
   --ring: #22c55e;
   --chart-1: #22c55e;
   --chart-2: #5eead4;
@@ -123,5 +123,17 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  input {
+    @apply border-input focus:border-primary/50 transition-colors duration-200 bg-background;
+  }
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px var(--background) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
+  }
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px var(--background) inset !important;
+    -webkit-text-fill-color: var(--foreground) !important;
   }
 }

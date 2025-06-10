@@ -7,9 +7,10 @@ import type { HealthAnalysisResponse } from "@/types";
 
 interface AIHealthAnalysisButtonProps {
   className?: string;
+  onAnalysisComplete?: () => void;
 }
 
-export function AIHealthAnalysisButton({ className }: AIHealthAnalysisButtonProps) {
+export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHealthAnalysisButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [analysis, setAnalysis] = useState<HealthAnalysisResponse | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,6 +32,9 @@ export function AIHealthAnalysisButton({ className }: AIHealthAnalysisButtonProp
       setIsModalOpen(true);
 
       toast.success("Health analysis completed!");
+
+      // Call the onAnalysisComplete callback to trigger alerts refetch
+      onAnalysisComplete?.();
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
       setError(errorMessage);
