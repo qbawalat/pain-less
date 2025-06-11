@@ -5,13 +5,15 @@ You are working on a feature flags system in a TypeScript/React/Astro applicatio
 ## Current Implementation
 
 The system uses:
+
 - Singleton pattern for global state management
-- Astro's environment variables (must use PUBLIC_ prefix)
+- Astro's environment variables (must use PUBLIC\_ prefix)
 - React hooks for component-level feature gating
 - In-memory caching for performance
 - Percentage-based rollouts and user overrides
 
 Key files:
+
 - `src/features/store.ts` - Main FeatureFlagsStore implementation
 - `src/features/types.ts` - TypeScript types and interfaces
 - `src/components/**/Fallback.tsx` - Fallback components for disabled features
@@ -21,6 +23,7 @@ Key files:
 When implementing feature flag changes, ALWAYS:
 
 1. Use the correct environment variable format:
+
    ```env
    PUBLIC_FEATURE_FLAG_[FEATURE_NAME]="true"
    PUBLIC_FEATURE_FLAG_[FEATURE_NAME]_PERCENTAGE="50"
@@ -28,6 +31,7 @@ When implementing feature flag changes, ALWAYS:
    ```
 
 2. Update TypeScript types in `types.ts`:
+
    ```typescript
    export type FeatureId = "existing_feature" | "your_new_feature";
    ```
@@ -42,6 +46,7 @@ When implementing feature flag changes, ALWAYS:
 ## Available Features
 
 Currently implemented features:
+
 - calendar
 - ai_analysis
 - advanced_stats
@@ -50,7 +55,7 @@ Currently implemented features:
 
 ### Adding a New Feature Flag
 
-1. Add environment variables with PUBLIC_ prefix
+1. Add environment variables with PUBLIC\_ prefix
 2. Add feature ID to FeatureId type
 3. Create fallback component
 4. Update environment variables documentation
@@ -64,7 +69,7 @@ Currently implemented features:
 
 ### Debugging Feature Flags
 
-1. Verify environment variable names (must have PUBLIC_ prefix)
+1. Verify environment variable names (must have PUBLIC\_ prefix)
 2. Check boolean string values (must be "true" or "false")
 3. Validate percentage values (0-100)
 4. Test force-enable user lists
@@ -86,7 +91,7 @@ Use these formats when asking for changes:
 
 When implementing changes:
 
-1. ALWAYS use PUBLIC_ prefix for environment variables
+1. ALWAYS use PUBLIC\_ prefix for environment variables
 2. ALWAYS update TypeScript types
 3. ALWAYS implement proper fallback states
 4. ALWAYS consider both enabled and disabled states
@@ -114,7 +119,7 @@ class FeatureFlagsStore {
   private static instance: FeatureFlagsStore;
   private config: Record<FeatureId, FeatureConfig>;
   private cache: Map<string, boolean>;
-  
+
   public isEnabled(featureId: FeatureId, userId?: string): boolean {
     // Implementation handles:
     // 1. Global enable/disable
@@ -126,9 +131,7 @@ class FeatureFlagsStore {
 
 // React hook pattern
 function useFeatureFlag(feature: FeatureId) {
-  const [isEnabled, setIsEnabled] = useState(() => 
-    FeatureFlagsStore.getInstance().isEnabled(feature)
-  );
+  const [isEnabled, setIsEnabled] = useState(() => FeatureFlagsStore.getInstance().isEnabled(feature));
   // Includes subscription for updates
 }
 ```
@@ -136,6 +139,7 @@ function useFeatureFlag(feature: FeatureId) {
 ## Error Messages
 
 Use these formats for error messages:
+
 1. Fallback UI: Friendly, informative messages about feature availability
 2. Development: Technical details for debugging
 3. Production: Generic messages without implementation details
@@ -143,8 +147,9 @@ Use these formats for error messages:
 ## Need Help?
 
 When asking for help, provide:
+
 1. The specific feature flag name
 2. Current environment variables
 3. Expected vs actual behavior
 4. Any error messages
-5. Relevant component code 
+5. Relevant component code

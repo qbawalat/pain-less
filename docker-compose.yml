@@ -18,16 +18,21 @@ services:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "--eval", "
-        const http = require('http');
-        const options = { host: 'localhost', port: 8080, timeout: 2000 };
-        const request = http.request(options, (res) => { 
-          if (res.statusCode === 200) process.exit(0); 
-          else process.exit(1); 
-        });
-        request.on('error', () => process.exit(1));
-        request.end();"]
+      test: [
+          "CMD",
+          "node",
+          "--eval",
+          "
+          const http = require('http');
+          const options = { host: 'localhost', port: 8080, timeout: 2000 };
+          const request = http.request(options, (res) => {
+          if (res.statusCode === 200) process.exit(0);
+          else process.exit(1);
+          });
+          request.on('error', () => process.exit(1));
+          request.end();",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s 
+      start_period: 40s

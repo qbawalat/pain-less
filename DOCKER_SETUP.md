@@ -5,6 +5,7 @@ This guide walks you through setting up the complete Docker CI/CD pipeline for y
 ## Overview
 
 The workflow automatically:
+
 - ✅ **Validates builds** on all PRs and pushes
 - 🐳 **Builds Docker images** with proper tagging (`dev-abc123f`, `prod-abc123f`)
 - 🔒 **Scans for vulnerabilities** using Trivy
@@ -21,11 +22,13 @@ The workflow automatically:
 ## Step 1: DigitalOcean Container Registry Setup
 
 ### Create Container Registry
+
 1. Go to DigitalOcean Console → Container Registry
 2. Create a new registry (e.g., `painless-registry`)
 3. Note the registry name for later
 
 ### Generate Registry Token
+
 1. Go to API → Tokens/Keys
 2. Generate a new token with **read/write** scope for Container Registry
 3. Copy the token securely
@@ -35,6 +38,7 @@ The workflow automatically:
 If you want automatic deployments to App Platform:
 
 ### Create App
+
 1. Go to App Platform → Create App
 2. Choose "Docker Hub or Container Registry"
 3. Configure:
@@ -43,6 +47,7 @@ If you want automatic deployments to App Platform:
    - **Tag:** `prod-latest` (will be updated automatically)
 
 ### Get App Details
+
 1. Note your **App Name** from the dashboard
 2. Generate an **API Token** with App Platform permissions
 
@@ -71,30 +76,35 @@ SUPABASE_ANON_KEY=your-supabase-anon-key
 
 ### Secret Setup Example
 
-| Secret Name | Example Value | Description |
-|-------------|---------------|-------------|
-| `DO_REGISTRY_NAME` | `painless-registry` | Your DigitalOcean registry name |
-| `DO_REGISTRY_TOKEN` | `dop_v1_abc123...` | Registry access token |
-| `OPENROUTER_API_KEY` | `sk-or-v1-abc123...` | OpenRouter API key |
-| `DO_APP_NAME` | `painless-app-prod` | App Platform app name |
-| `DO_API_TOKEN` | `dop_v1_def456...` | App Platform API token |
+| Secret Name          | Example Value        | Description                     |
+| -------------------- | -------------------- | ------------------------------- |
+| `DO_REGISTRY_NAME`   | `painless-registry`  | Your DigitalOcean registry name |
+| `DO_REGISTRY_TOKEN`  | `dop_v1_abc123...`   | Registry access token           |
+| `OPENROUTER_API_KEY` | `sk-or-v1-abc123...` | OpenRouter API key              |
+| `DO_APP_NAME`        | `painless-app-prod`  | App Platform app name           |
+| `DO_API_TOKEN`       | `dop_v1_def456...`   | App Platform API token          |
 
 ## Step 4: Workflow Behavior
 
 ### Branch Strategy
+
 - **`develop` branch:** Builds `dev-abc123f` images locally (validation only, not pushed to registry)
 - **`master` branch:** Builds `prod-abc123f` images, pushes to registry, deploys to production
 - **Pull Requests:** Builds images locally for testing, doesn't push to registry
 
 ### Image Tagging
+
 **Production builds only** create registry images with two tags:
+
 - **Version tag:** `painless-app:prod-abc123f` (with commit SHA)
 - **Latest tag:** `painless-app:prod-latest` (always current)
 
 **Development/PR builds** create local images only:
+
 - **Local tag:** `local-painless-app:dev-abc123f` (validation only)
 
 ### Security Features
+
 - 🔒 Vulnerability scanning with Trivy
 - 📋 Security reports in GitHub Security tab
 - 🚫 No secrets in Docker images
@@ -103,18 +113,21 @@ SUPABASE_ANON_KEY=your-supabase-anon-key
 ## Step 5: Testing the Setup
 
 ### Test Pull Request
+
 1. Create a feature branch: `git checkout -b feature/test-docker`
 2. Make a small change and push
 3. Create PR to `master`
 4. Check the workflow runs and comments on your PR
 
 ### Test Development Build
+
 1. Push to `develop` branch
 2. Verify Docker build completes successfully (check Actions tab)
 3. Confirm commit comment shows local build validation
 4. Note: No images are pushed to DigitalOcean Container Registry
 
 ### Test Production Deploy
+
 1. Merge PR to `master`
 2. Verify production deployment occurs
 3. Check App Platform for updated deployment
@@ -124,6 +137,7 @@ SUPABASE_ANON_KEY=your-supabase-anon-key
 If you prefer manual deployment or need to deploy specific versions:
 
 ### Using Docker
+
 ```bash
 # Pull and run specific version
 docker pull registry.digitalocean.com/your-registry/painless-app:prod-abc123f
@@ -133,6 +147,7 @@ docker run -p 8080:8080 \
 ```
 
 ### Using DigitalOcean CLI
+
 ```bash
 # Deploy specific image to App Platform
 doctl apps update your-app-id \
@@ -144,21 +159,25 @@ doctl apps update your-app-id \
 ### Common Issues
 
 **Build Fails:**
+
 - Check GitHub Secrets are properly set
 - Verify DigitalOcean registry permissions
 - Ensure Dockerfile builds locally
 
 **Registry Push Fails:**
+
 - Confirm `DO_REGISTRY_TOKEN` has write permissions
 - Check registry name matches `DO_REGISTRY_NAME`
 - Verify token hasn't expired
 
 **Deployment Fails:**
+
 - Ensure `DO_API_TOKEN` has App Platform permissions
 - Check app name matches `DO_APP_NAME`
 - Verify image exists in registry
 
 **Vulnerability Scan Fails:**
+
 - This is non-blocking - check Trivy action logs
 - Review security tab for specific vulnerabilities
 - Update base image or dependencies as needed
@@ -180,17 +199,20 @@ docker run -p 8080:8080 -e OPENROUTER_API_KEY=test test-image
 ## Monitoring and Maintenance
 
 ### Regular Tasks
+
 - 🔄 **Review vulnerability scans** weekly
 - 🧹 **Clean old images** from registry monthly
 - 📊 **Monitor deployment metrics** in App Platform
 - 🔑 **Rotate tokens** quarterly
 
 ### Performance Optimization
+
 - 📦 Images are multi-arch (AMD64/ARM64)
 - ⚡ Build caching enabled for faster builds
 - 🎯 Production images optimized for size
 
 ### Cost Management
+
 - 💰 Registry storage costs apply
 - 🗑️ Set up image cleanup policies
 - 📈 Monitor App Platform usage
@@ -198,14 +220,18 @@ docker run -p 8080:8080 -e OPENROUTER_API_KEY=test test-image
 ## Advanced Configuration
 
 ### Custom Environment Variables
+
 Add to GitHub Secrets and update workflow:
+
 ```yaml
 environment:
   - CUSTOM_VAR=${{ secrets.CUSTOM_VAR }}
 ```
 
 ### Multiple Environments
+
 Extend the workflow for staging:
+
 ```yaml
 - name: Deploy to Staging
   if: github.ref == 'refs/heads/develop'
@@ -213,7 +239,9 @@ Extend the workflow for staging:
 ```
 
 ### Custom Registry
+
 Update workflow to use different registry:
+
 ```yaml
 env:
   REGISTRY: your-custom-registry.com
@@ -229,4 +257,4 @@ env:
 
 ---
 
-Need help? Check the [GitHub Actions documentation](https://docs.github.com/en/actions) or [DigitalOcean's Container Registry guide](https://docs.digitalocean.com/products/container-registry/). 
+Need help? Check the [GitHub Actions documentation](https://docs.github.com/en/actions) or [DigitalOcean's Container Registry guide](https://docs.digitalocean.com/products/container-registry/).

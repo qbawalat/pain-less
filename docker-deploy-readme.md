@@ -5,6 +5,7 @@ This guide covers building and deploying the pAIn-less Astro application using D
 ## Quick Start
 
 ### Prerequisites
+
 - Docker and Docker Compose installed
 - Git repository access
 - Environment variables configured
@@ -12,16 +13,19 @@ This guide covers building and deploying the pAIn-less Astro application using D
 ### Build Commands
 
 **For Development (develop branch):**
+
 ```powershell
 .\scripts\build-docker.ps1 develop dev
 ```
 
 **For Production (master/main branch):**
+
 ```powershell
 .\scripts\build-docker.ps1 master prod
 ```
 
 **Manual Build:**
+
 ```bash
 # Development
 docker build --build-arg NODE_ENV=development --build-arg BUILD_ENV=dev -t painless-app:dev-$(git rev-parse --short HEAD) .
@@ -51,11 +55,13 @@ HOST=0.0.0.0
 ## Running the Application
 
 ### Local Development with Docker Compose
+
 ```bash
 docker-compose up --build
 ```
 
 ### Manual Docker Run
+
 ```bash
 # With environment file
 docker run -p 8080:8080 --env-file .env.local painless-app:dev-abc123f
@@ -72,6 +78,7 @@ docker run -p 8080:8080 \
 ## DigitalOcean Deployment
 
 ### App Platform Deployment
+
 1. Push your Docker image to a registry (Docker Hub, DigitalOcean Container Registry, etc.)
 2. Create a new App in DigitalOcean App Platform
 3. Configure the following:
@@ -81,6 +88,7 @@ docker run -p 8080:8080 \
    - **Environment Variables:** Set OPENROUTER_API_KEY and others as needed
 
 ### Droplet Deployment
+
 ```bash
 # On your DigitalOcean droplet
 docker pull your-registry/painless-app:prod-abc123f
@@ -113,6 +121,7 @@ The build script creates two tags for each build:
 ## Health Checks
 
 The container includes health checks that verify the application responds on port 8080:
+
 - **Interval:** 30 seconds
 - **Timeout:** 3 seconds
 - **Retries:** 3
@@ -123,16 +132,19 @@ The container includes health checks that verify the application responds on por
 ### Common Issues
 
 **Build Fails:**
+
 - Ensure Docker is running
 - Check that you're in the project root directory
 - Verify all dependencies in package.json are accessible
 
 **App Won't Start:**
+
 - Check that OPENROUTER_API_KEY is properly set
 - Verify port 8080 is not already in use
 - Check Docker logs: `docker logs container_name`
 
 **Health Check Fails:**
+
 - Ensure the app is listening on 0.0.0.0:8080
 - Check application logs for startup errors
 - Verify environment variables are correctly set
@@ -170,4 +182,4 @@ For production deployments, consider adding:
 - Log aggregation (ELK stack, Fluentd, or DigitalOcean's monitoring)
 - Application metrics (New Relic, DataDog, or custom metrics)
 - Uptime monitoring (Pingdom, UptimeRobot, or StatusCake)
-- Error tracking (Sentry, Bugsnag, or Rollbar) 
+- Error tracking (Sentry, Bugsnag, or Rollbar)

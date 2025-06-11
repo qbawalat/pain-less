@@ -117,14 +117,16 @@ PUBLIC_FEATURE_FLAG_ADVANCED_STATS_PERCENTAGE="0"
 ## Notes
 
 1. **Security**:
+
    - Never commit `.env` files to version control
    - Use different keys for different environments
    - Rotate secrets regularly
    - Use strong, unique values for secrets
-   - Keep server-side variables secret by NOT using the PUBLIC_ prefix
+   - Keep server-side variables secret by NOT using the PUBLIC\_ prefix
 
 2. **Feature Flags**:
-   - All feature flag variables must have the PUBLIC_ prefix to be accessible in client-side code
+
+   - All feature flag variables must have the PUBLIC\_ prefix to be accessible in client-side code
    - Values should be "true" or "false" (string)
    - Percentage values should be 0-100 (number)
    - Force enable lists should be comma-separated user IDs without spaces
@@ -132,13 +134,15 @@ PUBLIC_FEATURE_FLAG_ADVANCED_STATS_PERCENTAGE="0"
    - Use force enable sparingly, mainly for testing and beta users
 
 3. **Type Safety**:
+
    - All environment variables are validated at startup
    - Use `src/env.d.ts` for TypeScript type definitions
    - Access via `import.meta.env` in Astro
    - Use environment helper functions for type-safe access
-   - Client-side code can only access PUBLIC_ prefixed variables
+   - Client-side code can only access PUBLIC\_ prefixed variables
 
 4. **Local Development**:
+
    - Copy `.env.example` to `.env.local`
    - Never use production secrets in development
    - Use mock services when possible
@@ -148,7 +152,7 @@ PUBLIC_FEATURE_FLAG_ADVANCED_STATS_PERCENTAGE="0"
    - Set all required variables in your deployment platform
    - Verify all variables before deploying
    - Use secrets management for sensitive values
-   - Double-check PUBLIC_ prefixes for client-side variables
+   - Double-check PUBLIC\_ prefixes for client-side variables
 
 ## Validation
 

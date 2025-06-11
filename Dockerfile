@@ -80,9 +80,9 @@ USER astro
 # Expose port (DigitalOcean standard)
 EXPOSE 8080
 
-# Health check
+# Health check using Node's built-in http module
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node --eval "const http = require('http'); const options = { host: 'localhost', port: 8080, timeout: 2000 }; const request = http.request(options, (res) => { if (res.statusCode === 200) process.exit(0); else process.exit(1); }); request.on('error', () => process.exit(1)); request.end();" || exit 1
+    CMD node --eval "const http = require('http'); const options = { host: 'localhost', port: 8080, path: '/api/health', timeout: 2000 }; const request = http.request(options, (res) => { if (res.statusCode === 200) process.exit(0); else process.exit(1); }); request.on('error', () => process.exit(1)); request.end();" || exit 1
 
 # Start the application
 CMD ["dumb-init", "node", "./dist/server/entry.mjs"] 
