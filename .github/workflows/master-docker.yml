@@ -81,10 +81,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            HOST=${{ vars.HOST }}
-            PORT=${{ vars.PORT }}
-            PUBLIC_ENV_NAME=${{ vars.PUBLIC_ENV_NAME }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
