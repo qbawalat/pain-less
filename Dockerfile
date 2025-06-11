@@ -4,13 +4,14 @@
 FROM node:22.14.0-alpine AS builder
 
 # Build arguments for environment configuration
-ARG NODE_ENV=production
+ARG NODE_ENV=prod
 ARG BUILD_ENV=prod
 ARG SUPABASE_URL
 ARG SUPABASE_KEY
 ARG OPENROUTER_API_KEY
 ARG HOST=0.0.0.0
 ARG PORT=8080
+ARG PUBLIC_ENV_NAME=prod
 
 # Set environment variables for build process
 ENV NODE_ENV=${NODE_ENV}
@@ -20,6 +21,7 @@ ENV SUPABASE_KEY=${SUPABASE_KEY}
 ENV OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
 ENV HOST=${HOST}
 ENV PORT=${PORT}
+ENV PUBLIC_ENV_NAME=${PUBLIC_ENV_NAME}
 
 # Add metadata
 LABEL maintainer="painless-app"

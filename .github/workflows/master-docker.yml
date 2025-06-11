@@ -47,7 +47,7 @@ jobs:
     name: Build and Push Docker Image
     needs: [lint, unit-test]
     runs-on: ubuntu-latest
-    environment: production
+    environment: prod
     permissions:
       contents: read
       packages: write
@@ -82,9 +82,9 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            PUBLIC_ENV_NAME=${{ secrets.PUBLIC_ENV_NAME }}
-            HOST=0.0.0.0
-            PORT=8080
+            HOST=${{ vars.HOST }}
+            PORT=${{ vars.PORT }}
+            PUBLIC_ENV_NAME=${{ vars.PUBLIC_ENV_NAME }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
