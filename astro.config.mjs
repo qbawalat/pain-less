@@ -12,8 +12,8 @@ export default defineConfig({
   output: "server",
   integrations: [react(), sitemap()],
   server: {
-    port: parseInt(process.env.PORT || "3000", 10),
-    host: process.env.HOST || "localhost",
+    port: parseInt(process.env.PORT || "8080", 10),
+    host: process.env.HOST || "0.0.0.0",
   },
   vite: {
     plugins: [tailwindcss()],

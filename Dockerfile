@@ -9,6 +9,8 @@ ARG BUILD_ENV=prod
 ARG SUPABASE_URL
 ARG SUPABASE_KEY
 ARG OPENROUTER_API_KEY
+ARG HOST=0.0.0.0
+ARG PORT=8080
 
 # Set environment variables for build process
 ENV NODE_ENV=${NODE_ENV}
@@ -16,6 +18,8 @@ ENV BUILD_ENV=${BUILD_ENV}
 ENV SUPABASE_URL=${SUPABASE_URL}
 ENV SUPABASE_KEY=${SUPABASE_KEY}
 ENV OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+ENV HOST=${HOST}
+ENV PORT=${PORT}
 
 # Add metadata
 LABEL maintainer="painless-app"
@@ -78,11 +82,11 @@ COPY --from=builder --chown=astro:nodejs /app/package.json ./
 USER astro
 
 # Expose port (DigitalOcean standard)
-EXPOSE 8080
+EXPOSE ${PORT}
 
 # Health check using Node's built-in http module
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node --eval "const http = require('http'); const options = { host: 'localhost', port: 8080, path: '/api/health', timeout: 2000 }; const request = http.request(options, (res) => { if (res.statusCode === 200) process.exit(0); else process.exit(1); }); request.on('error', () => process.exit(1)); request.end();" || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
+    CMD node --eval "const http = require('http'); const options = { host: process.env.HOST || '0.0.0.0', port: process.env.PORT || 8080, path: '/api/health', timeout: 2000 }; const request = http.request(options, (res) => { if (res.statusCode === 200) process.exit(0); else process.exit(1); }); request.on('error', () => process.exit(1)); request.end();" || exit 1
 
 # Start the application
 CMD ["dumb-init", "node", "./dist/server/entry.mjs"] 

@@ -83,6 +83,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             PUBLIC_ENV_NAME=${{ secrets.PUBLIC_ENV_NAME }}
+            HOST=0.0.0.0
+            PORT=8080
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
