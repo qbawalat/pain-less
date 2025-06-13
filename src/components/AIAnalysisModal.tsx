@@ -1,8 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Info, X } from "lucide-react";
+import { AlertTriangle, Info } from "lucide-react";
 import type { HealthAnalysisResponse } from "@/types";
 
 interface AIAnalysisModalProps {
@@ -42,9 +41,6 @@ export function AIAnalysisModal({ analysis, isOpen, onClose }: AIAnalysisModalPr
         <DialogHeader>
           <div className="flex items-center justify-between">
             <DialogTitle className="text-2xl font-bold">AI Health Analysis Results</DialogTitle>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-6 w-6">
-              <X className="h-4 w-4" />
-            </Button>
           </div>
           <p className="text-sm text-muted-foreground">
             Generated on {new Date(analysis.analysis.generated_at).toLocaleDateString()}
@@ -106,11 +102,10 @@ export function AIAnalysisModal({ analysis, isOpen, onClose }: AIAnalysisModalPr
             </>
           )}
 
-          <div className="flex justify-between items-center pt-4 border-t">
+          <div className="flex justify-end items-center pt-4 border-t">
             <p className="text-xs text-muted-foreground">
               This analysis is for informational purposes only and should not replace professional medical advice.
             </p>
-            <Button onClick={onClose}>Close</Button>
           </div>
         </div>
       </DialogContent>
