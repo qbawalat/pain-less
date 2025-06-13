@@ -5,6 +5,8 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { passwordService } from "@/services/password";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -24,9 +26,15 @@ export function ForgotPasswordForm() {
 
   async function onSubmit(data: ForgotPasswordFormValues) {
     setIsLoading(true);
-    // Form submission will be handled later
-    console.log(data);
-    setIsLoading(false);
+    try {
+      await passwordService.forgotPassword(data);
+      toast.success("If an account exists with this email, you will receive a password reset link.");
+      form.reset();
+    } catch {
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

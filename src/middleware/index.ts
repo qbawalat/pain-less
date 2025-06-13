@@ -7,7 +7,8 @@ import { routeNormalizerMiddleware } from "./route-normalizer";
 const PROTECTED_ROUTES = ["/", "/calendar", "/profile", "/supplements", "/settings", "/medical-results"];
 
 // Auth routes that should redirect to home if user is already authenticated
-const AUTH_ROUTES = ["/auth/login", "/auth/register", "/auth/forgot-password", "/auth/reset-password"];
+const AUTH_ROUTES = ["/auth/login", "/auth/register", "/auth/forgot-password"];
+
 const supabaseUrl = process.env.SUPABASE_URL as string;
 const supabaseAnonKey = process.env.SUPABASE_KEY as string;
 export const onRequest = sequence(

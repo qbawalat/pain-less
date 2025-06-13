@@ -56,7 +56,7 @@ export function RegisterForm() {
       // Redirect to login page after a short delay
       setTimeout(() => {
         window.location.href = "/auth/login";
-      }, 2000);
+      }, 1000);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "An unexpected error occurred");
     } finally {

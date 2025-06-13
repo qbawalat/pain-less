@@ -166,11 +166,27 @@ Kryteria akceptacji:
   - Logowanie i rejestracja odbywają się na dedykowanych stronach.
   - Logowanie wymaga podania adresu email i hasła.
   - Rejestracja wymaga podania adresu email, hasła i potwierdzenia hasła.
+  - Rejestracja musi zostac potwierdzona poprzez klikniecie przez uzytkownika linku aktywacji konta wyslanego mu na maila
   - Użytkownik NIE MOŻE korzystać z zadnych featureow bez logowania się do systemu (US-001, US-002, US-003, US-004, US-005).
   - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
   - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w navbarze
   - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
   - Odzyskiwanie hasła powinno być możliwe.
+
+### US-007: Resetowanie hasła
+
+- Tytuł: Resetowanie hasła
+- Opis: Jako użytkownik, który zapomniał hasła, chcę móc je zresetować w bezpieczny sposób, aby odzyskać dostęp do swojego konta.
+- Kryteria akceptacji:
+  - Użytkownik ma dostęp do dedykowanej strony resetowania hasła
+  - Użytkownik może wprowadzić nowe hasło
+  - System weryfikuje, czy nowe hasło spełnia wymagania bezpieczeństwa
+  - Użytkownik otrzymuje potwierdzenie udanego resetowania hasła
+  - Po udanym resecie hasła, użytkownik jest przekierowany do strony logowania
+  - Użytkownik może wrócić do strony logowania, jeśli przypomni sobie hasło
+  - Funkcjonalność jest zaimplementowana zgodnie z wytycznymi dostępności (ARIA)
+  - Formularz resetowania hasła jest zaimplementowany jako komponent React dla interaktywności
+  - Strona wykorzystuje AuthLayout dla spójnego interfejsu autentykacji
 
 ## 6. Metryki sukcesu
 

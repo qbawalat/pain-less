@@ -1,12 +1,10 @@
-import type { LoginFormValues } from "@/types/auth";
-
 interface ForgotPasswordFormValues {
   email: string;
 }
 
-class AuthService {
+class PasswordService {
   private async request<T>(endpoint: string, data: unknown): Promise<T> {
-    const response = await fetch(`/api/auth/${endpoint}`, {
+    const response = await fetch(`/api/password/${endpoint}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,19 +16,15 @@ class AuthService {
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.error || "Authentication failed");
+      throw new Error(result.error || "Password operation failed");
     }
 
     return result;
   }
 
-  async login(credentials: LoginFormValues): Promise<void> {
-    await this.request("login", credentials);
-  }
-
   async forgotPassword(data: ForgotPasswordFormValues): Promise<void> {
-    await this.request("forgot-password", data);
+    await this.request("forgot", data);
   }
 }
 
-export const authService = new AuthService();
+export const passwordService = new PasswordService();
