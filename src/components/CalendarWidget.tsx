@@ -79,7 +79,7 @@ export default function CalendarWidget({
   const weekDates = getWeekDates();
 
   return (
-    <Card>
+    <Card data-testid="calendar-widget">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Calendar</CardTitle>
         <div className="flex items-center space-x-2">

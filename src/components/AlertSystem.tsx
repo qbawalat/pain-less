@@ -26,7 +26,7 @@ export default function AlertSystem({
   };
 
   return (
-    <Card>
+    <Card data-testid="alert-system">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Health Alerts</CardTitle>
       </CardHeader>
@@ -42,14 +42,26 @@ export default function AlertSystem({
                   alert.alert_type as "warning" | "info"
                 )}`}
                 role="alert"
+                data-testid="alert-item"
+                data-type={alert.alert_type}
               >
                 <AlertCircle className="h-5 w-5 mt-0.5" />
                 <div className="flex-1">
-                  <p className="font-medium">{alert.message}</p>
-                  <p className="text-sm mt-1">{new Date(alert.created_at).toLocaleString()}</p>
+                  <p className="font-medium" data-testid="alert-message">
+                    {alert.message}
+                  </p>
+                  <p className="text-sm mt-1" data-testid="alert-date">
+                    {new Date(alert.created_at).toLocaleString()}
+                  </p>
                 </div>
                 {alert.status === "pending" && (
-                  <Button variant="outline" size="sm" onClick={() => onAcknowledge(alert.id)} className="shrink-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onAcknowledge(alert.id)}
+                    className="shrink-0"
+                    data-testid="acknowledge-alert-button"
+                  >
                     <CheckCircle2 className="h-4 w-4 mr-2" />
                     Acknowledge
                   </Button>
