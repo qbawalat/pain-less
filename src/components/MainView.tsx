@@ -32,6 +32,7 @@ export default function MainView() {
     addSupplement,
     editSupplement,
     deleteSupplement,
+    refetch: refetchSupplements,
   } = useSupplements();
 
   const {
@@ -96,7 +97,10 @@ export default function MainView() {
         <ErrorBoundary>
           <AIHealthAnalysisButton
             className="bg-card border border-border rounded-lg shadow-sm"
-            onAnalysisComplete={refetchAlerts}
+            onAnalysisComplete={() => {
+              refetchAlerts();
+              refetchSupplements();
+            }}
           />
         </ErrorBoundary>
       </div>

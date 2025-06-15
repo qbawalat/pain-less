@@ -2,15 +2,28 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Info } from "lucide-react";
-import type { HealthAnalysisResponse } from "@/types";
+import { useState } from "react";
+import type { HealthAnalysisResponse, SupplementPlanResponse } from "@/types";
+import { SupplementPlanSection } from "./SupplementPlanSection";
 
 interface AIAnalysisModalProps {
   analysis: HealthAnalysisResponse | null;
   isOpen: boolean;
   onClose: () => void;
+  onRequestSupplementPlan: () => Promise<SupplementPlanResponse>;
+  onApprove?: () => void;
 }
 
-export function AIAnalysisModal({ analysis, isOpen, onClose }: AIAnalysisModalProps) {
+export function AIAnalysisModal({
+  analysis,
+  isOpen,
+  onClose,
+  onRequestSupplementPlan,
+  onApprove,
+}: AIAnalysisModalProps) {
+  const [supplementPlan, setSupplementPlan] = useState<SupplementPlanResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   if (!analysis) return null;
 
   const getAlertIcon = (type: "warning" | "info") => {
@@ -35,6 +48,18 @@ export function AIAnalysisModal({ analysis, isOpen, onClose }: AIAnalysisModalPr
     }
   };
 
+  const handleRequestSupplementPlan = async () => {
+    try {
+      setIsLoading(true);
+      const plan = await onRequestSupplementPlan();
+      setSupplementPlan(plan);
+    } catch (error) {
+      console.error("Failed to generate supplement plan:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -47,25 +72,24 @@ export function AIAnalysisModal({ analysis, isOpen, onClose }: AIAnalysisModalPr
           </p>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {analysis.analysis.alerts.length === 0 ? (
-            <Card>
-              <CardContent className="pt-6">
-                <div className="text-center space-y-2">
-                  <Info className="h-12 w-12 text-green-500 mx-auto" />
-                  <h3 className="text-lg font-semibold text-green-700">Great Health Profile!</h3>
-                  <p className="text-muted-foreground">
-                    No immediate health concerns detected in your current supplement regimen and health profile.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              <div>
-                <h3 className="text-lg font-semibold mb-4">
-                  Health Insights & Recommendations ({analysis.analysis.alerts.length})
-                </h3>
+        <div className="space-y-8">
+          {/* Health Analysis Section */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Health Analysis</h3>
+            {analysis.analysis.alerts.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="text-center space-y-2">
+                    <Info className="h-12 w-12 text-green-500 mx-auto" />
+                    <h3 className="text-lg font-semibold text-green-700">Great Health Profile!</h3>
+                    <p className="text-muted-foreground">
+                      No immediate health concerns detected in your current supplement regimen and health profile.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <>
                 <div className="space-y-4">
                   {analysis.analysis.alerts.map((alert, index) => (
                     <Card key={index} className="border-l-4 border-l-primary">
@@ -88,19 +112,33 @@ export function AIAnalysisModal({ analysis, isOpen, onClose }: AIAnalysisModalPr
                     </Card>
                   ))}
                 </div>
-              </div>
+              </>
+            )}
+          </div>
 
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <h4 className="font-medium text-sm mb-2">📋 Next Steps:</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Review the recommendations above carefully</li>
-                  <li>• Consult with your healthcare provider for medical advice</li>
-                  <li>• Consider adjusting your supplement regimen as suggested</li>
-                  <li>• Monitor your health and update your profile regularly</li>
-                </ul>
-              </div>
-            </>
-          )}
+          {/* Supplement Plan Section */}
+          <SupplementPlanSection
+            supplementPlan={supplementPlan}
+            isLoading={isLoading}
+            onRequestSupplementPlan={handleRequestSupplementPlan}
+            onApprove={() => {
+              console.log("Modal onApprove called"); // Debug log
+              onApprove?.();
+              onClose();
+            }}
+          />
+
+          {/* Next Steps Section */}
+          <div className="bg-muted/50 p-4 rounded-lg">
+            <h4 className="font-medium text-sm mb-2">📋 Next Steps:</h4>
+            <ul className="text-sm text-muted-foreground space-y-1">
+              <li>• Review all recommendations carefully</li>
+              <li>• Consult with your healthcare provider for medical advice</li>
+              <li>• Consider potential interactions with your current supplements</li>
+              <li>• Start with one supplement at a time to monitor effects</li>
+              <li>• Monitor your health and update your profile regularly</li>
+            </ul>
+          </div>
 
           <div className="flex justify-end items-center pt-4 border-t">
             <p className="text-xs text-muted-foreground">

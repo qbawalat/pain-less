@@ -29,25 +29,26 @@ export function SupplementCombobox({
   const selectedSupplement = supplements.find((sup) => sup.id === value);
 
   const handleSelect = async (currentValue: string) => {
-    if (currentValue === value) {
-      onValueChange("");
-    } else {
-      // Check if this is an existing supplement or a new one
-      const existingSupplement = supplements.find(
-        (sup) => sup.id === currentValue || sup.name.toLowerCase() === currentValue.toLowerCase()
-      );
+    // Check if this is an existing supplement or a new one
+    const existingSupplement = supplements.find(
+      (sup) => sup.id === currentValue || sup.name.toLowerCase() === currentValue.toLowerCase()
+    );
 
-      if (existingSupplement) {
+    if (existingSupplement) {
+      // If clicking the same supplement that's already selected, clear the selection
+      if (existingSupplement.id === value) {
+        onValueChange("");
+      } else {
         onValueChange(existingSupplement.id);
-      } else if (search.trim()) {
-        // Create new supplement
-        try {
-          const newSupplement = await onCreateSupplement(search.trim());
-          onValueChange(newSupplement.id);
-        } catch {
-          // Error is handled by the parent component
-          return;
-        }
+      }
+    } else if (search.trim()) {
+      // Create new supplement
+      try {
+        const newSupplement = await onCreateSupplement(search.trim());
+        onValueChange(newSupplement.id);
+      } catch {
+        // Error is handled by the parent component
+        return;
       }
     }
     setOpen(false);
@@ -55,10 +56,11 @@ export function SupplementCombobox({
   };
 
   const filteredSupplements = supplements.filter((supplement) =>
-    supplement.name.toLowerCase().includes(search.toLowerCase())
+    supplement.name.toLowerCase().includes(search.toLowerCase().trim())
   );
 
-  const showCreateOption = search.trim() && !supplements.some((sup) => sup.name.toLowerCase() === search.toLowerCase());
+  const showCreateOption =
+    search.trim() && !supplements.some((sup) => sup.name.toLowerCase() === search.toLowerCase().trim());
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -74,28 +76,33 @@ export function SupplementCombobox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command>
-          <CommandInput placeholder="Search supplements..." value={search} onValueChange={setSearch} />
-          <CommandList>
+          <CommandInput
+            placeholder="Search supplements..."
+            value={search}
+            onValueChange={(value) => {
+              setSearch(value);
+            }}
+          />
+          <CommandList className="max-h-[300px] overflow-y-auto">
             <CommandEmpty>{search.trim() ? "No supplements found." : "Type to search supplements..."}</CommandEmpty>
             {filteredSupplements.length > 0 && (
               <CommandGroup heading="Existing Supplements">
                 {filteredSupplements.map((supplement) => (
-                  <CommandItem key={supplement.id} value={supplement.id} onSelect={handleSelect}>
-                    <Check className={cn("mr-2 h-4 w-4", value === supplement.id ? "opacity-100" : "opacity-0")} />
-                    {supplement.name}
-                    {supplement.description && (
-                      <span className="ml-2 text-sm text-muted-foreground">- {supplement.description}</span>
-                    )}
+                  <CommandItem key={supplement.id} value={supplement.name} onSelect={handleSelect} className="truncate">
+                    <Check
+                      className={cn("mr-2 h-4 w-4 shrink-0", value === supplement.id ? "opacity-100" : "opacity-0")}
+                    />
+                    <span className="truncate">{supplement.name}</span>
                   </CommandItem>
                 ))}
               </CommandGroup>
             )}
             {showCreateOption && (
               <CommandGroup heading="Create New">
-                <CommandItem value={search} onSelect={handleSelect}>
-                  <Check className="mr-2 h-4 w-4 opacity-0" />
+                <CommandItem value={search} onSelect={handleSelect} className="truncate">
+                  <Check className="mr-2 h-4 w-4 opacity-0 shrink-0" />
                   Create &quot;{search}&quot;
                 </CommandItem>
               </CommandGroup>

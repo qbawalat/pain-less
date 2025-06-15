@@ -87,6 +87,33 @@ export class UserSupplementService {
     return this.mapToResponse(userSupplement);
   }
 
+  async bulkAddUserSupplements(data: UserSupplementCreate[]): Promise<UserSupplementResponse[]> {
+    const { data: userSupplements, error } = await this.supabase
+      .from("user_supplements")
+      .insert(
+        data.map((item) => ({
+          user_id: this.userId,
+          ...item,
+        }))
+      )
+      .select(
+        `
+        *,
+        supplement:supplements (
+          id,
+          name,
+          description
+        )
+      `
+      );
+
+    if (error) {
+      throw error;
+    }
+
+    return userSupplements.map(this.mapToResponse);
+  }
+
   async updateUserSupplement(id: string, data: UserSupplementUpdate): Promise<UserSupplementResponse> {
     const { data: userSupplement, error } = await this.supabase
       .from("user_supplements")

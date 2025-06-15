@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Loader2, AlertCircle } from "lucide-react";
 import { AIAnalysisModal } from "@/components/AIAnalysisModal";
 import { toast } from "sonner";
-import type { HealthAnalysisResponse } from "@/types";
+import type { HealthAnalysisResponse, SupplementPlanResponse } from "@/types";
 
 interface AIHealthAnalysisButtonProps {
   className?: string;
@@ -42,6 +42,18 @@ export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHeal
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleRequestSupplementPlan = async (): Promise<SupplementPlanResponse> => {
+    const response = await fetch("/api/kindly-ask-for/supplement-plan");
+
+    if (!response.ok) {
+      throw new Error("Failed to generate supplement plan");
+    }
+
+    const plan = await response.json();
+    toast.success("Supplement plan generated!");
+    return plan;
   };
 
   const getButtonContent = () => {
@@ -112,6 +124,8 @@ export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHeal
           setIsModalOpen(false);
           setAnalysis(null);
         }}
+        onRequestSupplementPlan={handleRequestSupplementPlan}
+        onApprove={onAnalysisComplete}
       />
     </>
   );
