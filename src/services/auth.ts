@@ -1,5 +1,9 @@
 import type { LoginFormValues } from "@/types/auth";
 
+interface ForgotPasswordFormValues {
+  email: string;
+}
+
 class AuthService {
   private async request<T>(endpoint: string, data: unknown): Promise<T> {
     const response = await fetch(`/api/auth/${endpoint}`, {
@@ -22,6 +26,10 @@ class AuthService {
 
   async login(credentials: LoginFormValues): Promise<void> {
     await this.request("login", credentials);
+  }
+
+  async forgotPassword(data: ForgotPasswordFormValues): Promise<void> {
+    await this.request("forgot-password", data);
   }
 }
 

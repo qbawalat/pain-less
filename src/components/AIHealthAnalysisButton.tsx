@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Brain, Loader2, AlertCircle } from "lucide-react";
 import { AIAnalysisModal } from "@/components/AIAnalysisModal";
 import { toast } from "sonner";
-import type { HealthAnalysisResponse } from "@/types";
+import type { HealthAnalysisResponse, SupplementPlanResponse } from "@/types";
 
 interface AIHealthAnalysisButtonProps {
   className?: string;
@@ -44,6 +44,18 @@ export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHeal
     }
   };
 
+  const handleRequestSupplementPlan = async (): Promise<SupplementPlanResponse> => {
+    const response = await fetch("/api/kindly-ask-for/supplement-plan");
+
+    if (!response.ok) {
+      throw new Error("Failed to generate supplement plan");
+    }
+
+    const plan = await response.json();
+    toast.success("Supplement plan generated!");
+    return plan;
+  };
+
   const getButtonContent = () => {
     if (isLoading) {
       return (
@@ -79,7 +91,7 @@ export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHeal
 
   return (
     <>
-      <div className={`flex flex-col items-center space-y-4 p-8 ${className || ""}`}>
+      <div className={`flex flex-col items-center space-y-4 p-8 ${className || ""}`} data-testid="ai-health-analysis">
         <div className="text-center space-y-2">
           <h3 className="text-xl font-bold text-foreground">Get Personalized Health Insights</h3>
           <p className="text-sm text-muted-foreground max-w-md">
@@ -94,6 +106,7 @@ export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHeal
           variant={getButtonVariant()}
           size="lg"
           className="h-16 px-8 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 active:scale-95"
+          data-testid="request-analysis-button"
         >
           {getButtonContent()}
         </Button>
@@ -112,6 +125,8 @@ export function AIHealthAnalysisButton({ className, onAnalysisComplete }: AIHeal
           setIsModalOpen(false);
           setAnalysis(null);
         }}
+        onRequestSupplementPlan={handleRequestSupplementPlan}
+        onApprove={onAnalysisComplete}
       />
     </>
   );

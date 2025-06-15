@@ -1,5 +1,6 @@
 import HealthStats from "./HealthStats";
 import CalendarWidget from "./CalendarWidget";
+import CalendarWidgetFallback from "./CalendarWidgetFallback";
 import SupplementList from "./SupplementList";
 import AlertSystem from "./AlertSystem";
 import { AIHealthAnalysisButton } from "./AIHealthAnalysisButton";
@@ -9,6 +10,10 @@ import { useHealthProfile } from "@/lib/hooks/useHealthProfile";
 import { useSupplements } from "@/lib/hooks/useSupplements";
 import { useAlerts } from "@/lib/hooks/useAlerts";
 import CreateHealthProfile from "./CreateHealthProfile";
+import { withFeatureFlag } from "./hoc/withFeatureFlag";
+
+// Owijamy CalendarWidget w HOC
+const FeatureFlaggedCalendar = withFeatureFlag(CalendarWidget, "calendar", CalendarWidgetFallback);
 
 export default function MainView() {
   // State management using custom hooks
@@ -27,6 +32,7 @@ export default function MainView() {
     addSupplement,
     editSupplement,
     deleteSupplement,
+    refetch: refetchSupplements,
   } = useSupplements();
 
   const {
@@ -81,7 +87,7 @@ export default function MainView() {
           {isSupplementsLoading || isAlertsLoading ? (
             <CalendarSkeleton />
           ) : (
-            <CalendarWidget supplements={supplements} alerts={alerts} />
+            <FeatureFlaggedCalendar supplements={supplements} alerts={alerts} />
           )}
         </ErrorBoundary>
       </div>
@@ -91,7 +97,10 @@ export default function MainView() {
         <ErrorBoundary>
           <AIHealthAnalysisButton
             className="bg-card border border-border rounded-lg shadow-sm"
-            onAnalysisComplete={refetchAlerts}
+            onAnalysisComplete={() => {
+              refetchAlerts();
+              refetchSupplements();
+            }}
           />
         </ErrorBoundary>
       </div>

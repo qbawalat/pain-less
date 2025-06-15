@@ -20,6 +20,7 @@ Frontend:
 - TypeScript 5 dla statycznego typowania
 - Tailwind 4 do stylowania
 - Shadcn/ui jako biblioteka komponentów UI
+- System feature flags do kontrolowania dostępności funkcji (np. kalendarz)
 
 Backend:
 
@@ -62,6 +63,9 @@ Głównym problemem jest rozproszenie i skomplikowanie w zarządzaniu informacja
 - Automatyczne oznaczenie wydarzeń z profilu
 - Wizualizacja okresów suplementacji
 - Dokładność oznaczeń na poziomie 95%
+- Dostępność funkcji kontrolowana przez feature flag (PUBLIC_FEATURE_FLAG_CALENDAR)
+- Możliwość stopniowego wdrażania funkcji poprzez kontrolę procentową (PUBLIC_FEATURE_FLAG_CALENDAR_PERCENTAGE)
+- Możliwość wymuszenia włączenia dla wybranych użytkowników (PUBLIC_FEATURE_FLAG_CALENDAR_FORCE_ENABLE_FOR_USERS)
 
 ### 3.3 System planów suplementacji
 
@@ -109,7 +113,6 @@ Kryteria akceptacji:
 - Użytkownik otrzymuje email weryfikacyjny
 - Użytkownik może się zalogować po weryfikacji
 - Użytkownik ma dostęp tylko do swoich danych
-- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
 
 ### US-002: Aktualizacja profilu zdrowotnego
 
@@ -120,8 +123,7 @@ Kryteria akceptacji:
 - Użytkownik może dodać nową chorobę/kontuzję
 - Użytkownik może dodać choroby rodzinne
 - Użytkownik może dodać suplementy
-- Użytkownik może dodać wyniki badań
-- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
+- Funkcjonalność nie jest dostępna bez logowania się do systemu 
 
 ### US-003: Przeglądanie kalendarza
 
@@ -132,7 +134,7 @@ Kryteria akceptacji:
 - Kalendarz pokazuje wydarzenia z profilu
 - Wydarzenia są poprawnie oznaczone (95% dokładność)
 - Użytkownik widzi okresy suplementacji
-- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
+- Funkcjonalność nie jest dostępna bez logowania się do systemu 
 
 ### US-004: Generowanie planu suplementacji
 
@@ -145,7 +147,7 @@ Kryteria akceptacji:
 - System wykrywa potencjalne interakcje
 - System pokazuje wskaźnik pewności AI
 - Użytkownik może zaakceptować lub odrzucić plan
-- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
+- Funkcjonalność nie jest dostępna bez logowania się do systemu
 
 ### US-005: Otrzymywanie alertów
 
@@ -156,7 +158,7 @@ Kryteria akceptacji:
 - System wysyła alerty o interakcjach
 - Alerty mają odpowiedni poziom (informacyjny/ostrzegawczy)
 - Użytkownik musi potwierdzić ostrzeżenia
-- Funkcjonalność nie jest dostępna bez logowania się do systemu (US-006).
+- Funkcjonalność nie jest dostępna bez logowania się do systemu 
 
 ### US-006: Bezpieczny dostęp i uwierzytelnianie
 
@@ -166,11 +168,27 @@ Kryteria akceptacji:
   - Logowanie i rejestracja odbywają się na dedykowanych stronach.
   - Logowanie wymaga podania adresu email i hasła.
   - Rejestracja wymaga podania adresu email, hasła i potwierdzenia hasła.
-  - Użytkownik NIE MOŻE korzystać z zadnych featureow bez logowania się do systemu (US-001, US-002, US-003, US-004, US-005).
+  - Rejestracja musi zostac potwierdzona poprzez klikniecie przez uzytkownika linku aktywacji konta wyslanego mu na maila
+  - Użytkownik NIE MOŻE korzystać z zadnych featureow bez logowania się do systemu (US-002, US-003, US-004, US-005).
   - Użytkownik może logować się do systemu poprzez przycisk w prawym górnym rogu.
   - Użytkownik może się wylogować z systemu poprzez przycisk w prawym górnym rogu w navbarze
   - Nie korzystamy z zewnętrznych serwisów logowania (np. Google, GitHub).
   - Odzyskiwanie hasła powinno być możliwe.
+
+### US-007: Resetowanie hasła
+
+- Tytuł: Resetowanie hasła
+- Opis: Jako użytkownik, który zapomniał hasła, chcę móc je zresetować w bezpieczny sposób, aby odzyskać dostęp do swojego konta.
+- Kryteria akceptacji:
+  - Użytkownik ma dostęp do dedykowanej strony resetowania hasła
+  - Użytkownik może wprowadzić nowe hasło
+  - System weryfikuje, czy nowe hasło spełnia wymagania bezpieczeństwa
+  - Użytkownik otrzymuje potwierdzenie udanego resetowania hasła
+  - Po udanym resecie hasła, użytkownik jest przekierowany do strony logowania
+  - Użytkownik może wrócić do strony logowania, jeśli przypomni sobie hasło
+  - Funkcjonalność jest zaimplementowana zgodnie z wytycznymi dostępności (ARIA)
+  - Formularz resetowania hasła jest zaimplementowany jako komponent React dla interaktywności
+  - Strona wykorzystuje AuthLayout dla spójnego interfejsu autentykacji
 
 ## 6. Metryki sukcesu
 

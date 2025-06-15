@@ -285,6 +285,33 @@
   Authorization: Bearer <token>
   ```
 
+#### POST /api/auth/forgot-password
+
+- Description: Send password reset link to user's email
+- Request Body:
+
+```json
+{
+  "email": "string"
+}
+```
+
+- Response: 200 OK
+- Validation:
+  - email is required and must be valid
+- Response Body:
+
+```json
+{
+  "message": "If an account exists with this email, you will receive a password reset link."
+}
+```
+
+- Security:
+  - Always return success even if email doesn't exist (prevents email enumeration)
+  - Rate limit: 3 requests per hour per IP
+  - Reset link expires in 1 hour
+
 ### Authorization
 
 - Row Level Security (RLS) policies enforced at database level

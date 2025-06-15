@@ -48,6 +48,39 @@ export class SupplementService {
     return this.mapToResponse(supplement);
   }
 
+  async bulkCreateSupplements(data: SupplementCreate[]): Promise<SupplementResponse[]> {
+    const { data: supplements, error } = await this.supabase.from("supplements").insert(data).select();
+
+    if (error) {
+      throw error;
+    }
+
+    return supplements.map(this.mapToResponse);
+  }
+
+  async findOrCreateSupplement(data: SupplementCreate): Promise<SupplementResponse> {
+    // First try to find the supplement by name
+    const { data: existing } = await this.supabase.from("supplements").select().ilike("name", data.name).single();
+
+    if (existing) {
+      return this.mapToResponse(existing);
+    }
+
+    // If not found, create it
+    return this.createSupplement(data);
+  }
+
+  async bulkFindOrCreateSupplements(data: SupplementCreate[]): Promise<SupplementResponse[]> {
+    const results: SupplementResponse[] = [];
+
+    for (const supplement of data) {
+      const result = await this.findOrCreateSupplement(supplement);
+      results.push(result);
+    }
+
+    return results;
+  }
+
   private mapToResponse(supplement: Database["public"]["Tables"]["supplements"]["Row"]): SupplementResponse {
     return {
       id: supplement.id,

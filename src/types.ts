@@ -59,9 +59,12 @@ export type HealthAlertAcknowledge = Pick<Database["public"]["Tables"]["health_a
 export interface SupplementPlanResponse {
   plan: {
     recommendations: {
-      supplement_id: string;
+      name: string;
+      description: string;
+      dosage: string;
+      frequency: string;
+      end_date: string | null;
       confidence_score: number;
-      reasoning: string;
       potential_interactions: string[];
     }[];
     generated_at: string;

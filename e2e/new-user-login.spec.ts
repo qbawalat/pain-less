@@ -18,66 +18,82 @@ if (!TEST_USER_EMAIL || !TEST_USER_PASSWORD) {
 
 test.describe("New User Login Flow", () => {
   test("should create health profile after successful login", async ({ page }) => {
-    // Initialize page objects
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new MainDashboardPage(page);
-    const healthProfilePage = new CreateHealthProfilePage(page);
+    try {
+      // Initialize page objects
+      const loginPage = new LoginPage(page);
+      const dashboardPage = new MainDashboardPage(page);
+      const healthProfilePage = new CreateHealthProfilePage(page);
 
-    // Step 1: Navigate to login page and verify it's visible
-    await loginPage.navigate();
-    expect(await loginPage.isLoginFormVisible()).toBeTruthy();
+      // Step 1: Navigate to login page and verify it's visible
+      await loginPage.navigate();
+      expect(await loginPage.isLoginFormVisible()).toBeTruthy();
 
-    // Step 2: Fill in login credentials
-    await loginPage.login(TEST_USER_EMAIL, TEST_USER_PASSWORD);
+      // Step 2: Fill in login credentials
+      await loginPage.login(TEST_USER_EMAIL, TEST_USER_PASSWORD);
 
-    // Step 3: Verify we're redirected to create profile page
-    await dashboardPage.waitForCreateProfile();
-    expect(await dashboardPage.isCreateProfileVisible()).toBeTruthy();
-    expect(await healthProfilePage.isFormVisible()).toBeTruthy();
+      // Step 3: Verify we're redirected to create profile page
+      await dashboardPage.waitForCreateProfile();
+      expect(await dashboardPage.isCreateProfileVisible()).toBeTruthy();
+      expect(await healthProfilePage.isFormVisible()).toBeTruthy();
 
-    // Step 4: Fill in health profile information
-    await healthProfilePage.fillBasicInfo("1990-01-01", 180, 75);
+      // Step 4: Fill in health profile information
+      await healthProfilePage.fillBasicInfo("1990-01-01", 180, 75);
 
-    // Step 5: Add some medical conditions
-    await healthProfilePage.addSuggestedCondition("Eye strain");
-    await healthProfilePage.addSuggestedCondition("Back pain");
-    await healthProfilePage.addMedicalCondition("Custom condition");
+      // Step 5: Add some medical conditions
+      await healthProfilePage.addSuggestedCondition("Eye strain");
+      await healthProfilePage.addSuggestedCondition("Back pain");
+      await healthProfilePage.addMedicalCondition("Custom condition");
 
-    // Step 6: Add family history
-    await healthProfilePage.addFamilyCondition("Diabetes");
-    await healthProfilePage.addFamilyCondition("Heart disease");
+      // Step 6: Add family history
+      await healthProfilePage.addFamilyCondition("Diabetes");
+      await healthProfilePage.addFamilyCondition("Heart disease");
 
-    // Step 7: Verify conditions were added correctly
-    const medicalConditions = await healthProfilePage.getSelectedMedicalConditions();
-    expect(medicalConditions).toContain("Eye strain");
-    expect(medicalConditions).toContain("Back pain");
-    expect(medicalConditions).toContain("Custom condition");
+      // Step 7: Verify conditions were added correctly
+      const medicalConditions = await healthProfilePage.getSelectedMedicalConditions();
+      expect(medicalConditions).toContain("Eye strain");
+      expect(medicalConditions).toContain("Back pain");
+      expect(medicalConditions).toContain("Custom condition");
 
-    const familyConditions = await healthProfilePage.getSelectedFamilyConditions();
-    expect(familyConditions).toContain("Diabetes");
-    expect(familyConditions).toContain("Heart disease");
+      const familyConditions = await healthProfilePage.getSelectedFamilyConditions();
+      expect(familyConditions).toContain("Diabetes");
+      expect(familyConditions).toContain("Heart disease");
 
-    // Step 8: Submit the form
-    await healthProfilePage.submit();
+      // Step 8: Submit the form
+      await healthProfilePage.submit();
 
-    // Step 9: Verify we're redirected to the main dashboard
-    await dashboardPage.waitForDashboard();
-    expect(await dashboardPage.isDashboardVisible()).toBeTruthy();
-    expect(await dashboardPage.isCreateProfileVisible()).toBeFalsy();
+      // Step 9: Verify we're redirected to the main dashboard
+      await dashboardPage.waitForDashboard();
+      expect(await dashboardPage.isDashboardVisible()).toBeTruthy();
+      expect(await dashboardPage.isCreateProfileVisible()).toBeFalsy();
+    } catch (error) {
+      test.info().annotations.push({
+        type: "error",
+        description: `Failed to create health profile: ${error instanceof Error ? error.message : "Unknown error"}`,
+      });
+      throw error;
+    }
   });
 
   test("should handle invalid login credentials", async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new MainDashboardPage(page);
+    try {
+      const loginPage = new LoginPage(page);
+      const dashboardPage = new MainDashboardPage(page);
 
-    // Step 1: Navigate to login page
-    await loginPage.navigate();
+      // Step 1: Navigate to login page
+      await loginPage.navigate();
 
-    // Step 2: Try to login with invalid credentials
-    await loginPage.login("invalid@email.com", "wrongpassword");
+      // Step 2: Try to login with invalid credentials
+      await loginPage.login("invalid@email.com", "wrongpassword");
 
-    // Step 3: Verify we're still on the login page
-    expect(await loginPage.isLoginFormVisible()).toBeTruthy();
-    expect(await dashboardPage.isDashboardVisible()).toBeFalsy();
+      // Step 3: Verify we're still on the login page
+      expect(await loginPage.isLoginFormVisible()).toBeTruthy();
+      expect(await dashboardPage.isDashboardVisible()).toBeFalsy();
+    } catch (error) {
+      test.info().annotations.push({
+        type: "error",
+        description: `Failed to handle invalid login: ${error instanceof Error ? error.message : "Unknown error"}`,
+      });
+      throw error;
+    }
   });
 });

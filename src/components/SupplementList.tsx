@@ -38,6 +38,7 @@ export default function SupplementList({
   onDelete,
 }: SupplementListProps) {
   const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [customFrequency, setCustomFrequency] = useState("");
   const [formData, setFormData] = useState<UserSupplementCreate>({
     supplement_id: "",
@@ -64,6 +65,7 @@ export default function SupplementList({
         await onAdd(finalFormData);
       }
       setIsEditing(null);
+      setIsSheetOpen(false);
       setFormData({
         supplement_id: "",
         start_date: new Date().toISOString().split("T")[0],
@@ -79,6 +81,7 @@ export default function SupplementList({
 
   const handleEdit = (supplement: UserSupplementResponse) => {
     setIsEditing(supplement.id);
+    setIsSheetOpen(true);
 
     // Check if the frequency is a predefined option
     const predefinedFrequency = frequencyOptions.find((option) => option.value === supplement.frequency.toLowerCase());
@@ -112,6 +115,21 @@ export default function SupplementList({
     }
   };
 
+  const handleSheetOpenChange = (open: boolean) => {
+    if (!open) {
+      setIsEditing(null);
+      setFormData({
+        supplement_id: "",
+        start_date: new Date().toISOString().split("T")[0],
+        end_date: null,
+        dosage: "",
+        frequency: "",
+      });
+      setCustomFrequency("");
+    }
+    setIsSheetOpen(open);
+  };
+
   // Ensure supplements is an array
   const supplementsList = Array.isArray(supplements) ? supplements : [];
 
@@ -119,9 +137,9 @@ export default function SupplementList({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Supplements</CardTitle>
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
           <SheetTrigger asChild>
-            <Button>
+            <Button data-testid="add-supplement-button">
               <Plus className="mr-2 h-4 w-4" />
               Add Supplement
             </Button>
@@ -140,6 +158,7 @@ export default function SupplementList({
                   onCreateSupplement={createSupplement}
                   placeholder="Select or create supplement..."
                   disabled={loadingSupplements}
+                  data-testid="supplement-name-input"
                 />
                 {loadingSupplements && <p className="text-sm text-muted-foreground">Loading supplements...</p>}
               </div>
@@ -152,6 +171,7 @@ export default function SupplementList({
                   value={formData.start_date}
                   onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
                   required
+                  data-testid="supplement-start-date-input"
                 />
               </div>
 
@@ -167,6 +187,7 @@ export default function SupplementList({
                       end_date: e.target.value ? e.target.value : null,
                     })
                   }
+                  data-testid="supplement-end-date-input"
                 />
               </div>
 
@@ -178,13 +199,14 @@ export default function SupplementList({
                   onChange={(e) => setFormData({ ...formData, dosage: e.target.value })}
                   placeholder="e.g., 500mg, 1 tablet, 2 capsules"
                   required
+                  data-testid="supplement-dosage-input"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="frequency">Frequency</Label>
                 <Select value={formData.frequency} onValueChange={handleFrequencyChange}>
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="supplement-frequency-input">
                     <SelectValue placeholder="Select frequency" />
                   </SelectTrigger>
                   <SelectContent>
@@ -202,6 +224,7 @@ export default function SupplementList({
                     value={customFrequency}
                     onChange={(e) => setCustomFrequency(e.target.value)}
                     required
+                    data-testid="supplement-custom-frequency-input"
                   />
                 )}
               </div>
@@ -215,6 +238,7 @@ export default function SupplementList({
                   loadingSupplements
                 }
                 className="w-full"
+                data-testid="save-supplement-button"
               >
                 {isEditing ? "Update Supplement" : "Add Supplement"}
               </Button>
@@ -243,19 +267,31 @@ export default function SupplementList({
               </TableRow>
             ) : (
               supplementsList.map((supplement) => (
-                <TableRow key={supplement.id}>
-                  <TableCell>{supplement.supplement.name}</TableCell>
-                  <TableCell>{supplement.dosage}</TableCell>
-                  <TableCell>{supplement.frequency}</TableCell>
-                  <TableCell>{new Date(supplement.start_date).toLocaleDateString()}</TableCell>
-                  <TableCell>
+                <TableRow key={supplement.id} data-testid="supplement-item" data-name={supplement.supplement.name}>
+                  <TableCell data-testid="supplement-name">{supplement.supplement.name}</TableCell>
+                  <TableCell data-testid="supplement-dosage">{supplement.dosage}</TableCell>
+                  <TableCell data-testid="supplement-frequency">{supplement.frequency}</TableCell>
+                  <TableCell data-testid="supplement-start-date">
+                    {new Date(supplement.start_date).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell data-testid="supplement-end-date">
                     {supplement.end_date ? new Date(supplement.end_date).toLocaleDateString() : "Ongoing"}
                   </TableCell>
                   <TableCell className="text-right space-x-2">
-                    <Button variant="ghost" size="icon" onClick={() => handleEdit(supplement)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEdit(supplement)}
+                      data-testid="edit-supplement-button"
+                    >
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => onDelete(supplement.id)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onDelete(supplement.id)}
+                      data-testid="delete-supplement-button"
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </TableCell>

@@ -95,9 +95,10 @@ interface Metrics {
   cacheHits: number;
   cacheMisses: number;
 }
+const OPEN_ROUTER_API_KEY = process.env.OPENROUTER_API_KEY as string;
 
 export class OpenRouterService {
-  private readonly _apiKey: string;
+  private readonly _apiKey: string = OPEN_ROUTER_API_KEY;
   private readonly _baseUrl: string;
   private readonly _defaultModel?: string;
   private readonly _maxRetries: number;
@@ -122,9 +123,9 @@ export class OpenRouterService {
 
   constructor(config: OpenRouterConfig) {
     this._validateConfig(config);
-    this._apiKey = import.meta.env.OPENROUTER_API_KEY;
+    this._apiKey = OPEN_ROUTER_API_KEY;
     if (!this._apiKey) {
-      throw new Error("OPENROUTER_API_KEY environment variable is not set");
+      throw new Error(`OPENROUTER_API_KEY environment variable is not set`);
     }
     this._baseUrl = config.baseUrl ?? DEFAULT_CONFIG.baseUrl;
     this._defaultModel = config.defaultModel;
@@ -385,12 +386,28 @@ export class OpenRouterService {
 
       const data = await response.json();
       const content = data.choices[0].message.content;
-      const parsedContent = JSON.parse(content);
 
+      // If response format is json_schema, parse the content
+      if (params.responseFormat?.type === "json_schema") {
+        try {
+          const parsedContent = JSON.parse(content);
+          return {
+            message: content,
+            confidence: data.choices[0].finish_reason === "stop" ? 1 : 0.5,
+            ...parsedContent,
+          };
+        } catch (parseError) {
+          if (parseError instanceof Error) {
+            throw new ValidationError(`Failed to parse JSON response: ${parseError.message}`);
+          }
+          throw new ValidationError("Failed to parse JSON response: Unknown error");
+        }
+      }
+
+      // For non-JSON responses, return the content as is
       return {
         message: content,
         confidence: data.choices[0].finish_reason === "stop" ? 1 : 0.5,
-        ...parsedContent,
       };
     } catch (error) {
       return this._handleError(error);

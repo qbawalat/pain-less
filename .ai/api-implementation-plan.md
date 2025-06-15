@@ -265,16 +265,7 @@ const userSupplementSchema = z.object({
 
 1. Autentykacja (POC)
 
-   - Hardcoded user dla celów POC:
-     ```typescript
-     const POC_USER = {
-       id: "b8d7c922-9f3f-4796-9742-b1b39e0ac588",
-       email: "diego@gmail.com",
-     };
-     ```
-   - TODO: Implementacja pełnej autentykacji Supabase w przyszłości
-   - TODO: Implementacja JWT validation
-   - TODO: Implementacja session management
+   - Implementacja pełnej autentykacji Supabase
 
 2. Autoryzacja
 

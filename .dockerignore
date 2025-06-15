@@ -1,0 +1,65 @@
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Git
+.git
+.gitignore
+
+# Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist
+build
+.astro
+
+# Environment files
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# Test
+test-results
+playwright-report
+
+# Temporary folders
+tmp
+temp
+
+# Cache
+.cache
+.parcel-cache
+.eslintcache
+
+# Documentation
+README.md
+CHANGELOG.md
+*.md 

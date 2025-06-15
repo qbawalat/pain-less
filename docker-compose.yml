@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      - BUILD_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3000
+      - PUBLIC_ENV_NAME=development
+      # Add your environment variables here
+      # - SUPABASE_URL=your_supabase_url
+      # - SUPABASE_KEY=your_supabase_key
+      # - OPENROUTER_API_KEY=your_openrouter_key
+    command: npm run dev -- --host 0.0.0.0
+    restart: unless-stopped

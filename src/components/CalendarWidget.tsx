@@ -79,7 +79,7 @@ export default function CalendarWidget({
   const weekDates = getWeekDates();
 
   return (
-    <Card>
+    <Card data-testid="calendar-widget">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Calendar</CardTitle>
         <div className="flex items-center space-x-2">
@@ -103,19 +103,22 @@ export default function CalendarWidget({
             const isToday = date.toDateString() === new Date().toDateString();
 
             return (
-              <div key={index} className={`min-h-[100px] p-1 border rounded-sm ${isToday ? "bg-muted" : ""}`}>
+              <div key={index} className={`min-h-[150px] p-1 border rounded-sm ${isToday ? "bg-muted" : ""}`}>
                 <div className="text-sm font-medium">{date.getDate()}</div>
                 <div className="space-y-1">
-                  {events.map((event, eventIndex) => (
+                  {events.slice(0, 5).map((event, eventIndex) => (
                     <div
                       key={eventIndex}
                       className={`text-xs p-1 rounded ${
-                        event.type === "supplement" ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
+                        event.type === "supplement" ? "bg-primary/20 text-primary" : "bg-yellow-100 text-yellow-800"
                       }`}
                     >
-                      {event.title}
+                      {event.title.length > 20 ? `${event.title.substring(0, 20)}...` : event.title}
                     </div>
                   ))}
+                  {events.length > 5 && (
+                    <div className="text-xs text-muted-foreground text-center">+{events.length - 5} more</div>
+                  )}
                 </div>
               </div>
             );

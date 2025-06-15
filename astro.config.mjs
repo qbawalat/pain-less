@@ -11,12 +11,12 @@ import node from "@astrojs/node";
 export default defineConfig({
   output: "server",
   integrations: [react(), sitemap()],
-  server: { port: 3000 },
+  server: {
+    port: parseInt(process.env.PORT || "3000", 10),
+    host: process.env.HOST || "localhost",
+  },
   vite: {
     plugins: [tailwindcss()],
-    define: {
-      "process.env.OPENROUTER_API_KEY": JSON.stringify(process.env.OPENROUTER_API_KEY),
-    },
   },
   adapter: node({
     mode: "standalone",

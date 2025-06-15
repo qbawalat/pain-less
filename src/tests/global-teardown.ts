@@ -23,8 +23,8 @@ async function globalTeardown() {
   });
 
   // List of tables to clean up (excluding auth.users)
-  const tablesToClean = ["health_profiles"];
-  // const tablesToClean = ["health_profiles", "health_alerts", "user_supplements"];
+  // const tablesToClean = ["health_profiles"];
+  const tablesToClean = ["health_profiles", "user_supplements"];
 
   for (const table of tablesToClean) {
     try {

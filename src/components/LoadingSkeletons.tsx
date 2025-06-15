@@ -130,22 +130,6 @@ export const LoadingSkeletons = {
       </CardContent>
     </Card>
   ),
-
-  CalendarSkeleton: () => (
-    <Card>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="h-6 bg-muted rounded animate-pulse" />
-          <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
-        </div>
-        <div className="space-y-2">
-          <div className="h-4 bg-muted rounded animate-pulse" />
-          <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
-        </div>
-      </CardContent>
-    </Card>
-  ),
-
   SupplementListSkeleton: () => (
     <Card>
       <CardHeader>
