@@ -3,7 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/qbawalat/pain-less/graphs/commit-activity)
-[![CI/CD](https://github.com/qbawalat/pain-less/actions/workflows/ci.yml/badge.svg)](https://github.com/qbawalat/pain-less/actions/workflows/ci.yml)
+[![Deployment](https://github.com/qbawalat/pain-less/actions/workflows/master-docker.yml/badge.svg)](https://github.com/qbawalat/pain-less/actions/workflows/master-docker.yml)
+[![Pull Request](https://github.com/qbawalat/pain-less/actions/workflows/pull-request.yml/badge.svg)](https://github.com/qbawalat/pain-less/actions/workflows/pull-request.yml)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-🚀%20Try%20Now-success)](https://pain-free-app-vvwnj.ondigitalocean.app/)
 
 <div align="center">
   <br/>
@@ -184,118 +186,4 @@ npm run preview
 
 | Variable             | Description            | Required | Default     |
 | -------------------- | ---------------------- | -------- | ----------- |
-| `SUPABASE_URL`       | Supabase project URL   | Yes      | -           |
-| `SUPABASE_KEY`       | Supabase anonymous key | Yes      | -           |
-| `OPENROUTER_API_KEY` | Openrouter.ai API key  | Yes      | -           |
-| `NODE_ENV`           | Environment            | No       | development |
-
-## Architecture
-
-```
-src/
-├── components/     # React components
-├── layouts/        # Astro layouts
-├── pages/          # Astro pages
-├── styles/         # Global styles
-├── lib/            # Utility functions
-├── types/          # TypeScript types
-└── api/            # API endpoints
-```
-
-## Security
-
-- All health data is encrypted at rest and in transit
-- Regular security audits and penetration testing
-- Rate limiting on API endpoints
-- Secure authentication through Supabase
-- GDPR compliance for health data
-- Regular dependency updates
-- Security headers implementation
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Database Connection Issues**
-
-   - Verify Supabase credentials in `.env`
-   - Check network connectivity
-   - Ensure database is running
-
-2. **AI Service Issues**
-
-   - Verify Openrouter.ai API key
-   - Check API rate limits
-   - Verify internet connection
-
-3. **Build Issues**
-   - Clear node_modules and reinstall
-   - Check Node.js version
-   - Verify environment variables
-
-## Contributing
-
-We love your input! We want to make contributing to pAIN-less as easy and transparent as possible, whether it's:
-
-- Reporting a bug
-- Discussing the current state of the code
-- Submitting a fix
-- Proposing new features
-- Becoming a maintainer
-
-### Development Process
-
-1. Fork the repo and create your branch from `main`
-2. If you've added code that should be tested, add tests
-3. If you've changed APIs, update the documentation
-4. Ensure the test suite passes
-5. Make sure your code lints
-6. Issue that pull request!
-
-### Pull Request Process
-
-1. Update the README.md with details of changes if needed
-2. Update the docs/ with any necessary documentation
-3. The PR will be merged once you have the sign-off of at least one other developer
-
-## Code of Conduct
-
-### Our Pledge
-
-We are committed to making participation in this project a harassment-free experience for everyone.
-
-### Our Standards
-
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
-
-## Changelog
-
-### [1.0.0] - 2024-03-XX
-
-- Initial release
-- Basic health profile management
-- AI-powered supplementation system
-- Health calendar implementation
-- Alert system
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Supabase](https://supabase.io) - Backend and authentication
-- [Openrouter.ai](https://openrouter.ai) - AI model access
-- [Astro](https://astro.build) - Web framework
-- [React](https://reactjs.org) - UI library
-- [Shadcn/ui](https://ui.shadcn.com) - UI components
-
-## Contact
-
-- Project Link: [https://github.com/qbawalat/pain-less](https://github.com/qbawalat/pain-less)
-- Issue Tracker: [https://github.com/qbawalat/pain-less/issues](https://github.com/qbawalat/pain-less/issues)
-- Documentation: [https://github.com/qbawalat/pain-less/docs](https://github.com/qbawalat/pain-less/docs)
+| `SUPABASE_URL`
