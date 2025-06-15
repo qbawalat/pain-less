@@ -38,6 +38,7 @@ export default function SupplementList({
   onDelete,
 }: SupplementListProps) {
   const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [customFrequency, setCustomFrequency] = useState("");
   const [formData, setFormData] = useState<UserSupplementCreate>({
     supplement_id: "",
@@ -64,6 +65,7 @@ export default function SupplementList({
         await onAdd(finalFormData);
       }
       setIsEditing(null);
+      setIsSheetOpen(false);
       setFormData({
         supplement_id: "",
         start_date: new Date().toISOString().split("T")[0],
@@ -79,6 +81,7 @@ export default function SupplementList({
 
   const handleEdit = (supplement: UserSupplementResponse) => {
     setIsEditing(supplement.id);
+    setIsSheetOpen(true);
 
     // Check if the frequency is a predefined option
     const predefinedFrequency = frequencyOptions.find((option) => option.value === supplement.frequency.toLowerCase());
@@ -112,6 +115,21 @@ export default function SupplementList({
     }
   };
 
+  const handleSheetOpenChange = (open: boolean) => {
+    if (!open) {
+      setIsEditing(null);
+      setFormData({
+        supplement_id: "",
+        start_date: new Date().toISOString().split("T")[0],
+        end_date: null,
+        dosage: "",
+        frequency: "",
+      });
+      setCustomFrequency("");
+    }
+    setIsSheetOpen(open);
+  };
+
   // Ensure supplements is an array
   const supplementsList = Array.isArray(supplements) ? supplements : [];
 
@@ -119,7 +137,7 @@ export default function SupplementList({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">Supplements</CardTitle>
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
           <SheetTrigger asChild>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
